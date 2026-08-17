@@ -11,7 +11,11 @@
   min-height: 6px;
   border-radius: var(--radius-full);
   background-color: $color-brand-active;
-  animation: waveform-jump 1s ease-in-out infinite alternate;
+  transition: height 0.08s ease-out;
+
+  &:not(.live-meter) {
+    animation: waveform-jump 1s ease-in-out infinite alternate;
+  }
 }
 
 .waveform-container[data-color='playing'] .waveform-bar {

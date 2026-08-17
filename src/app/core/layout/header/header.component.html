@@ -1,107 +1,102 @@
-<header class="app-header sticky-top glass-header">
-  <div class="container-fluid px-3 px-md-4">
-    <div class="d-flex align-items-center justify-content-between header-inner">
-      
-      <!-- Brand & Title Section -->
-      <div class="d-flex align-items-center gap-3 brand-section">
+<header class="app-header sticky-top glass-panel border-bottom">
+  <div class="container-fluid px-3 px-lg-4 h-100 d-flex align-items-center justify-content-between">
+    
+    <!-- Brand Identity & Navigation Links -->
+    <div class="d-flex align-items-center gap-3 gap-lg-4">
+      <a routerLink="/walkie-talkie" class="brand-logo-link d-flex align-items-center gap-2 text-decoration-none">
         <div class="brand-icon-wrapper d-flex align-items-center justify-content-center">
-          <i class="bi bi-broadcast-pin fs-4 text-white" aria-hidden="true"></i>
+          <i class="bi bi-broadcast-pin text-primary fs-5" aria-hidden="true"></i>
         </div>
         <div class="d-flex flex-column">
-          <div class="d-flex align-items-center gap-2">
-            <span class="fw-bold fs-5 brand-title">{{ i18nService.get('app.title') }}</span>
-            <span class="badge rounded-pill brand-badge d-none d-sm-inline-block">
-              {{ i18nService.get('app.badge') }}
-            </span>
-          </div>
-          <span class="small brand-subtitle d-none d-md-inline-block">
+          <span class="brand-title fw-bold text-primary lh-1">
+            {{ i18nService.get('app.title') }}
+          </span>
+          <span class="brand-subtitle text-secondary">
             {{ i18nService.get('app.subtitle') }}
           </span>
         </div>
+      </a>
+
+      <!-- Navigation Tabs (Walkie-Talkie & Guide) -->
+      <nav class="nav header-nav-tabs d-none d-md-flex align-items-center gap-1 ms-2" aria-label="Main Navigation">
+        <a 
+          routerLink="/walkie-talkie" 
+          routerLinkActive="active" 
+          class="nav-link header-nav-link px-3 py-1 rounded-2 small fw-semibold text-decoration-none">
+          <i class="bi bi-mic-fill me-1" aria-hidden="true"></i>
+          {{ i18nService.get('nav.walkieTalkie') }}
+        </a>
+        <a 
+          routerLink="/guide" 
+          routerLinkActive="active" 
+          class="nav-link header-nav-link px-3 py-1 rounded-2 small fw-semibold text-decoration-none">
+          <i class="bi bi-book-half me-1" aria-hidden="true"></i>
+          {{ i18nService.get('nav.guide') }}
+        </a>
+      </nav>
+    </div>
+
+    <!-- Right Controls: Status Pill + Language Switcher + Settings Gear -->
+    <div class="d-flex align-items-center gap-2 gap-sm-3">
+      
+      <!-- Live Engine Workflow Status Pill -->
+      <div 
+        class="status-pill d-none d-sm-flex align-items-center gap-2 px-3 py-1 rounded-pill"
+        [attr.data-state]="stateService.workflowState$ | async">
+        <span class="status-indicator-dot"></span>
+        <span class="status-label fw-semibold small">
+          {{ i18nService.get('status.' + (stateService.workflowState$ | async)) }}
+        </span>
       </div>
 
-      <!-- Center: Live Reactive Status Pill -->
-      <div class="status-pill-container d-none d-md-flex align-items-center">
-        @if (stateService.workflowState$ | async; as state) {
-          <div class="status-pill d-flex align-items-center gap-2 px-3 py-1 rounded-pill" [attr.data-state]="state">
-            <span class="status-dot"></span>
-            <span class="status-text fw-medium small">
-              @switch (state) {
-                @case (AppWorkflowState.IDLE) {
-                  {{ i18nService.get('status.idle') }}
-                }
-                @case (AppWorkflowState.REQUESTING_PERMISSION) {
-                  {{ i18nService.get('status.requesting_permission') }}
-                }
-                @case (AppWorkflowState.RECORDING) {
-                  {{ i18nService.get('status.recording') }}
-                }
-                @case (AppWorkflowState.PROCESSING) {
-                  {{ i18nService.get('status.processing') }}
-                }
-                @case (AppWorkflowState.PLAYING) {
-                  {{ i18nService.get('status.playing') }}
-                }
-                @case (AppWorkflowState.ERROR) {
-                  {{ i18nService.get('status.error') }}
-                }
-              }
-            </span>
-          </div>
-        }
-      </div>
+      <!-- App Language Switcher Dropdown -->
+      <div class="dropdown position-relative">
+        <button 
+          type="button"
+          class="btn btn-outline-custom touch-action-target d-flex align-items-center gap-2 px-3 py-1 rounded-pill"
+          (click)="toggleLangDropdown()"
+          aria-expanded="false"
+          aria-label="Select App Language">
+          <span class="fs-6">{{ i18nService.currentLanguageFlag() }}</span>
+          <span class="d-none d-md-inline small fw-medium text-uppercase">{{ i18nService.currentLanguage() }}</span>
+          <i class="bi bi-chevron-down small" aria-hidden="true"></i>
+        </button>
 
-      <!-- Right Controls: App Language & Theme Switcher -->
-      <div class="d-flex align-items-center gap-2 controls-section">
-        
-        <!-- App Language Switcher Dropdown -->
-        <div class="position-relative">
-          <button 
-            type="button" 
-            class="btn btn-outline-custom touch-action-target d-flex align-items-center gap-2 px-2 px-sm-3 py-1 rounded-3"
-            (click)="toggleLangDropdown()"
-            [attr.aria-label]="i18nService.get('languages.selectLanguage')">
-            <i class="bi bi-globe2 fs-5" aria-hidden="true"></i>
-            <span class="text-uppercase fw-semibold small">{{ i18nService.currentLanguage() }}</span>
-            <i class="bi bi-chevron-down small" aria-hidden="true"></i>
-          </button>
-
-          @if (isLangDropdownOpen) {
-            <div class="lang-dropdown-menu shadow-lg rounded-3 py-1" role="menu">
-              @for (lang of i18nService.supportedLanguages; track lang.code) {
+        @if (isLangDropdownOpen) {
+          <div class="dropdown-backdrop" (click)="isLangDropdownOpen = false"></div>
+          <ul class="dropdown-menu dropdown-menu-end show shadow-lg border-0 py-2 mt-2 rounded-3 custom-dropdown-menu">
+            @for (lang of i18nService.supportedLanguages; track lang.code) {
+              <li>
                 <button 
-                  type="button"
+                  type="button" 
                   class="dropdown-item d-flex align-items-center justify-content-between px-3 py-2"
                   [class.active]="i18nService.currentLanguage() === lang.code"
                   (click)="selectAppLanguage(lang.code)">
-                  <span class="d-flex align-items-center gap-2">
+                  <div class="d-flex align-items-center gap-2">
                     <span>{{ lang.flag }}</span>
-                    <span>{{ lang.label }}</span>
-                  </span>
+                    <span class="small fw-medium">{{ lang.label }}</span>
+                  </div>
                   @if (i18nService.currentLanguage() === lang.code) {
-                    <i class="bi bi-check2 text-primary fw-bold" aria-hidden="true"></i>
+                    <i class="bi bi-check2 text-primary"></i>
                   }
                 </button>
-              }
-            </div>
-          }
-        </div>
-
-        <!-- Theme Toggle Button -->
-        <button 
-          type="button" 
-          class="btn btn-outline-custom touch-action-target rounded-3 p-2 theme-toggle-btn"
-          (click)="toggleTheme()"
-          [attr.aria-label]="i18nService.get('theme.toggleAria')">
-          @if (themeService.currentTheme() === AppTheme.DARK) {
-            <i class="bi bi-sun-fill text-warning fs-5" aria-hidden="true"></i>
-          } @else {
-            <i class="bi bi-moon-stars-fill text-primary fs-5" aria-hidden="true"></i>
-          }
-        </button>
-
+              </li>
+            }
+          </ul>
+        }
       </div>
 
+      <!-- Settings Button (Triggers Right Slide-out Drawer) -->
+      <button 
+        type="button"
+        class="btn btn-settings-trigger touch-action-target d-flex align-items-center justify-content-center rounded-circle border-0"
+        (click)="openSettings()"
+        [attr.aria-label]="i18nService.get('nav.settings')"
+        title="Settings">
+        <i class="bi bi-gear-fill fs-5" aria-hidden="true"></i>
+      </button>
+
     </div>
+
   </div>
 </header>

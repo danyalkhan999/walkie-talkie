@@ -57,14 +57,20 @@
                 type="button"
                 class="mic-action-button btn border-0 d-flex align-items-center justify-content-center text-white"
                 [class.is-recording]="appState === AppWorkflowState.RECORDING"
-                [class.is-processing]="appState === AppWorkflowState.PROCESSING"
-                (click)="toggleRecording()"
+                [class.is-processing]="appState === AppWorkflowState.PROCESSING || appState === AppWorkflowState.REQUESTING_PERMISSION"
+                (mousedown)="onPointerDown($event)"
+                (mouseup)="onPointerUp()"
+                (mouseleave)="onPointerLeave()"
+                (touchstart)="onPointerDown($event)"
+                (touchend)="onPointerUp()"
+                (touchcancel)="onPointerUp()"
+                (click)="handleButtonClick()"
                 [attr.aria-label]="i18nService.get('workspace.recordButtonAria')">
                 @if (appState === AppWorkflowState.RECORDING) {
                   <i class="bi bi-stop-fill fs-2" aria-hidden="true"></i>
-                } @else if (appState === AppWorkflowState.PROCESSING) {
+                } @else if (appState === AppWorkflowState.PROCESSING || appState === AppWorkflowState.REQUESTING_PERMISSION) {
                   <div class="spinner-border spinner-border-sm text-white" role="status">
-                    <span class="visually-hidden">Processing...</span>
+                    <span class="visually-hidden">Loading...</span>
                   </div>
                 } @else {
                   <i class="bi bi-mic-fill fs-2" aria-hidden="true"></i>

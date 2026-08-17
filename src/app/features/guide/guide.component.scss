@@ -1,0 +1,90 @@
+@use 'styles/variables' as *;
+
+.guide-wrapper {
+  background-color: $color-bg-primary;
+  min-height: calc(100vh - #{$header-height});
+  color: $color-text-primary;
+}
+
+.max-width-xl {
+  max-width: 1200px;
+}
+
+/* Sticky Sidebar Column */
+.sticky-sidebar-col {
+  position: sticky;
+  top: calc(#{$header-height} + 24px);
+  z-index: 10;
+}
+
+.sidebar-card {
+  background-color: var(--color-bg-surface);
+  border: 1px solid $color-border;
+  box-shadow: $color-card-shadow;
+}
+
+.guide-nav-item {
+  color: $color-text-secondary;
+  background: transparent;
+  transition: $transition-fast;
+
+  &:hover {
+    color: $color-brand-primary;
+    background-color: var(--color-bg-elevated);
+  }
+}
+
+/* Guide Content */
+.tech-pill {
+  background-color: var(--color-bg-elevated);
+  color: $color-brand-primary;
+  border: 1px solid $color-border;
+  font-size: 0.775rem;
+  padding: 0.35em 0.8em;
+}
+
+.guide-hero-header {
+  border-color: $color-border !important;
+}
+
+.section-icon-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  background-color: var(--color-bg-elevated);
+  border: 1px solid $color-border;
+}
+
+.content-card {
+  background-color: var(--color-bg-surface);
+  border: 1px solid $color-border;
+  box-shadow: $color-card-shadow;
+  transition: $transition-smooth;
+
+  &:hover {
+    border-color: $color-border-hover;
+  }
+}
+
+.step-card {
+  background-color: var(--color-bg-surface);
+  border: 1px solid $color-border;
+  box-shadow: $color-card-shadow;
+  transition: $transition-fast;
+
+  &:hover {
+    border-color: $color-brand-primary;
+    transform: translateY(-2px);
+  }
+
+  .step-number {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: $color-brand-primary;
+    letter-spacing: -0.05em;
+  }
+}
+
+.setup-list {
+  line-height: 1.7;
+}

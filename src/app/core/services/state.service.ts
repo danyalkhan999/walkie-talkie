@@ -36,11 +36,15 @@ export class StateService {
   private readonly translatedTextSubject = new BehaviorSubject<string>('');
   readonly translatedText$: Observable<string> = this.translatedTextSubject.asObservable();
 
+  // Audio Blob Buffer (Binary captured payload)
+  private readonly capturedAudioBlobSubject = new BehaviorSubject<Blob | null>(null);
+  readonly capturedAudioBlob$: Observable<Blob | null> = this.capturedAudioBlobSubject.asObservable();
+
   // Error State
   private readonly errorMessageSubject = new BehaviorSubject<string | null>(null);
   readonly errorMessage$: Observable<string | null> = this.errorMessageSubject.asObservable();
 
-  // Internal timer reference for simulation
+  // Internal timer reference for mock pipeline
   private simulationTimer: ReturnType<typeof setTimeout> | null = null;
 
   constructor() {
@@ -57,6 +61,10 @@ export class StateService {
 
   get currentTargetLanguage(): string {
     return this.targetLanguageSubject.value;
+  }
+
+  get latestAudioBlob(): Blob | null {
+    return this.capturedAudioBlobSubject.value;
   }
 
   /**
@@ -124,6 +132,10 @@ export class StateService {
     this.translatedTextSubject.next(text);
   }
 
+  setCapturedAudioBlob(blob: Blob | null): void {
+    this.capturedAudioBlobSubject.next(blob);
+  }
+
   setError(message: string | null): void {
     if (message) {
       console.warn(`${LOG_PREFIXES.STATE} Error reported: ${message}`);
@@ -142,51 +154,40 @@ export class StateService {
   }
 
   /**
-   * Activity 1: Simulates the complete pipeline cycle for UI verification
+   * Activity 2 pipeline: Simulates translation after real audio blob is captured
    */
-  simulateMockWorkflow(): void {
-    if (this.simulationTimer) {
-      clearTimeout(this.simulationTimer);
-    }
+  processRecordedAudio(blob: Blob, durationMs: number): void {
+    this.setCapturedAudioBlob(blob);
+    this.setWorkflowState(AppWorkflowState.PROCESSING);
+    this.setRecordedText('Voice input captured successfully (' + (durationMs / 1000).toFixed(1) + 's).');
+    this.setTranslatedText('');
 
-    if (this.currentState === AppWorkflowState.IDLE) {
-      // Step 1: Start Recording
-      console.log(`${LOG_PREFIXES.ACTION} [Mock Simulation] User pressed Push-to-Talk (Start Recording)`);
-      this.setWorkflowState(AppWorkflowState.RECORDING);
-      this.recordedTextSubject.next('Hello, how are you doing today?');
-      this.translatedTextSubject.next('');
-    } else if (this.currentState === AppWorkflowState.RECORDING) {
-      // Step 2: Stop Recording -> Processing
-      console.log(`${LOG_PREFIXES.ACTION} [Mock Simulation] User released Push-to-Talk (Stop Recording)`);
-      this.setWorkflowState(AppWorkflowState.PROCESSING);
+    if (this.simulationTimer) clearTimeout(this.simulationTimer);
 
-      // Step 3: Transition to Playing
+    // Activity 2 simulation of downstream pipeline (STT/LLM will replace this in Act 3/4)
+    this.simulationTimer = setTimeout(() => {
+      const mockTranslations: Record<string, string> = {
+        es: '¡Hola! Entrada de voz procesada con éxito.',
+        fr: 'Bonjour ! Entrée vocale traitée avec succès.',
+        de: 'Hallo! Spracheingabe erfolgreich verarbeitet.',
+        hi: 'नमस्ते! ध्वनि इनपुट सफलतापूर्वक संसाधित हुआ।',
+        ja: 'こんにちは！ 音声入力が正常に処理されました。',
+        zh: '你好！ 语音输入处理成功。'
+      };
+
+      const targetLang = this.targetLanguageSubject.value;
+      const translated = mockTranslations[targetLang] || `[${targetLang.toUpperCase()}] Voice processed (${blob.size} bytes).`;
+      
+      this.setTranslatedText(translated);
+      this.setWorkflowState(AppWorkflowState.PLAYING);
+      console.log(`${LOG_PREFIXES.ACTION} Playback started for audio translation.`);
+
       this.simulationTimer = setTimeout(() => {
-        const mockTranslations: Record<string, string> = {
-          es: '¡Hola! ¿Cómo estás hoy?',
-          fr: 'Bonjour, comment allez-vous aujourd\'hui ?',
-          de: 'Hallo, wie geht es Ihnen heute?',
-          hi: 'नमस्ते, आज आप कैसे हैं?',
-          ja: 'こんにちは、今日の調子はいかがですか？',
-          zh: '你好，你今天过得怎么样？'
-        };
-
-        const targetLang = this.targetLanguageSubject.value;
-        const translated = mockTranslations[targetLang] || `[Translation in ${targetLang}] Hello, how are you doing today?`;
-        
-        this.translatedTextSubject.next(translated);
-        this.setWorkflowState(AppWorkflowState.PLAYING);
-        console.log(`${LOG_PREFIXES.ACTION} [Mock Simulation] Pipeline finished. Playing output: "${translated}"`);
-
-        // Step 4: Back to Idle
-        this.simulationTimer = setTimeout(() => {
+        if (this.currentState === AppWorkflowState.PLAYING) {
           this.setWorkflowState(AppWorkflowState.IDLE);
-          console.log(`${LOG_PREFIXES.ACTION} [Mock Simulation] Audio finished. Back to IDLE`);
-        }, APP_TIMINGS.SIMULATED_PLAYBACK_MS);
-      }, APP_TIMINGS.SIMULATED_PROCESSING_MS);
-    } else if (this.currentState === AppWorkflowState.PLAYING) {
-      console.log(`${LOG_PREFIXES.ACTION} [Mock Simulation] Interrupted playback`);
-      this.setWorkflowState(AppWorkflowState.IDLE);
-    }
+          console.log(`${LOG_PREFIXES.ACTION} Audio output finished. Returned to IDLE.`);
+        }
+      }, APP_TIMINGS.SIMULATED_PLAYBACK_MS);
+    }, APP_TIMINGS.SIMULATED_PROCESSING_MS);
   }
 }

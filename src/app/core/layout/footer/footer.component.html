@@ -10,16 +10,16 @@
         </span>
       </div>
 
-      <!-- Tech Architecture Badges -->
+      <!-- Tech Architecture Badges & Guide Link -->
       <div class="d-flex align-items-center gap-2 footer-badges">
+        <a routerLink="/guide" class="badge tech-badge text-decoration-none d-inline-flex align-items-center gap-1">
+          <i class="bi bi-book-half" aria-hidden="true"></i>{{ i18nService.get('nav.guide') }}
+        </a>
         <span class="badge tech-badge">
           <i class="bi bi-lightning-charge-fill me-1" aria-hidden="true"></i>CSR Only
         </span>
         <span class="badge tech-badge">
           <i class="bi bi-mic-fill me-1" aria-hidden="true"></i>Native MediaRecorder
-        </span>
-        <span class="badge tech-badge d-none d-sm-inline-block">
-          <i class="bi bi-cpu-fill me-1" aria-hidden="true"></i>RxJS State Engine
         </span>
       </div>
 

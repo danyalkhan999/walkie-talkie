@@ -1,0 +1,214 @@
+<div class="guide-wrapper py-4 py-lg-5">
+  <div class="container max-width-xl">
+    
+    <div class="row g-4 g-xl-5 align-items-start">
+      
+      <!-- Sticky Sidebar Navigation Table of Contents -->
+      <aside class="col-12 col-lg-3 sticky-sidebar-col" aria-label="Guide Navigation">
+        <div class="sidebar-card p-3 p-xl-4 rounded-3">
+          <span class="text-uppercase tracking-wider small fw-bold text-secondary mb-3 d-block">
+            {{ i18nService.get('guide.tableOfContents') }}
+          </span>
+
+          <nav class="nav flex-column gap-1">
+            @for (sec of sections; track sec.id) {
+              <button 
+                type="button" 
+                class="nav-link guide-nav-item d-flex align-items-center gap-2 px-3 py-2 rounded-2 border-0 text-start"
+                (click)="scrollToSection(sec.id)">
+                <i class="bi" [ngClass]="sec.icon" aria-hidden="true"></i>
+                <span class="small fw-medium">{{ i18nService.get(sec.labelKey) }}</span>
+              </button>
+            }
+          </nav>
+
+          <!-- Quick Action Buttons in Sidebar -->
+          <div class="mt-4 pt-3 border-top d-flex flex-column gap-2">
+            <button 
+              type="button" 
+              class="btn btn-outline-primary btn-sm d-flex align-items-center justify-content-center gap-2 py-2 rounded-2"
+              (click)="openSettings()">
+              <i class="bi bi-gear-fill" aria-hidden="true"></i>
+              <span>{{ i18nService.get('guide.openSettingsBtn') }}</span>
+            </button>
+
+            <a 
+              routerLink="/walkie-talkie" 
+              class="btn btn-primary btn-sm d-flex align-items-center justify-content-center gap-2 py-2 rounded-2 text-decoration-none">
+              <i class="bi bi-broadcast-pin" aria-hidden="true"></i>
+              <span>{{ i18nService.get('guide.launchAppBtn') }}</span>
+            </a>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Semantic Article Content -->
+      <main class="col-12 col-lg-9">
+        <article class="guide-content-article">
+          
+          <!-- Guide Header Title -->
+          <header class="guide-hero-header mb-5 pb-4 border-bottom">
+            <div class="badge rounded-pill tech-pill mb-2">
+              <i class="bi bi-book-half me-1" aria-hidden="true"></i>
+              EchoTranslate Documentation
+            </div>
+            <h1 class="display-6 fw-bold text-primary mb-2">
+              {{ i18nService.get('guide.pageTitle') }}
+            </h1>
+            <p class="fs-5 text-secondary m-0">
+              {{ i18nService.get('guide.pageSubtitle') }}
+            </p>
+          </header>
+
+          <!-- Section 1: About -->
+          <section id="about" class="guide-section mb-5">
+            <div class="d-flex align-items-center gap-2 mb-3">
+              <div class="section-icon-badge d-flex align-items-center justify-content-center">
+                <i class="bi bi-info-circle-fill text-primary" aria-hidden="true"></i>
+              </div>
+              <h2 class="fs-4 fw-bold m-0 text-primary">{{ i18nService.get('guide.aboutTitle') }}</h2>
+            </div>
+            <div class="content-card p-4 rounded-3 mb-3">
+              <p class="lh-lg m-0 text-secondary">
+                {{ i18nService.get('guide.aboutContent') }}
+              </p>
+            </div>
+          </section>
+
+          <!-- Section 2: Quick Start -->
+          <section id="quickstart" class="guide-section mb-5">
+            <div class="d-flex align-items-center gap-2 mb-3">
+              <div class="section-icon-badge d-flex align-items-center justify-content-center">
+                <i class="bi bi-lightning-charge-fill text-warning" aria-hidden="true"></i>
+              </div>
+              <h2 class="fs-4 fw-bold m-0 text-primary">{{ i18nService.get('guide.quickstartTitle') }}</h2>
+            </div>
+
+            <div class="row g-3">
+              <div class="col-12 col-md-4">
+                <div class="step-card h-100 p-4 rounded-3 d-flex flex-column">
+                  <span class="step-number mb-2">01</span>
+                  <p class="small text-secondary m-0">{{ i18nService.get('guide.quickstartStep1') }}</p>
+                </div>
+              </div>
+              <div class="col-12 col-md-4">
+                <div class="step-card h-100 p-4 rounded-3 d-flex flex-column">
+                  <span class="step-number mb-2">02</span>
+                  <p class="small text-secondary m-0">{{ i18nService.get('guide.quickstartStep2') }}</p>
+                </div>
+              </div>
+              <div class="col-12 col-md-4">
+                <div class="step-card h-100 p-4 rounded-3 d-flex flex-column">
+                  <span class="step-number mb-2">03</span>
+                  <p class="small text-secondary m-0">{{ i18nService.get('guide.quickstartStep3') }}</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Section 3: API Setup Guide -->
+          <section id="api-setup" class="guide-section mb-5">
+            <div class="d-flex align-items-center gap-2 mb-3">
+              <div class="section-icon-badge d-flex align-items-center justify-content-center">
+                <i class="bi bi-key-fill text-primary" aria-hidden="true"></i>
+              </div>
+              <h2 class="fs-4 fw-bold m-0 text-primary">{{ i18nService.get('guide.apiSetupTitle') }}</h2>
+            </div>
+
+            <!-- Groq Setup Box -->
+            <div class="content-card p-4 rounded-3 mb-4">
+              <div class="d-flex align-items-center justify-content-between mb-3">
+                <h3 class="fs-5 fw-bold m-0 text-primary d-flex align-items-center gap-2">
+                  <i class="bi bi-lightning-fill text-warning"></i>
+                  {{ i18nService.get('guide.apiSetupGroq') }}
+                </h3>
+                <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1 small fw-semibold">
+                  Free Tier Available
+                </span>
+              </div>
+              
+              <ol class="setup-list mb-3 ps-3 text-secondary">
+                <li class="mb-2">{{ i18nService.get('guide.apiSetupGroqStep1') }}</li>
+                <li class="mb-2">{{ i18nService.get('guide.apiSetupGroqStep2') }}</li>
+                <li class="mb-0">{{ i18nService.get('guide.apiSetupGroqStep3') }}</li>
+              </ol>
+
+              <button 
+                type="button" 
+                class="btn btn-outline-primary btn-sm d-inline-flex align-items-center gap-2 py-2 px-3 rounded-2"
+                (click)="openSettings()">
+                <i class="bi bi-gear-fill"></i>
+                <span>{{ i18nService.get('guide.openSettingsBtn') }}</span>
+              </button>
+            </div>
+
+            <!-- OpenAI Setup Box -->
+            <div class="content-card p-4 rounded-3">
+              <h3 class="fs-5 fw-bold mb-3 text-primary d-flex align-items-center gap-2">
+                <i class="bi bi-cpu-fill text-primary"></i>
+                {{ i18nService.get('guide.apiSetupOpenAI') }}
+              </h3>
+              
+              <ol class="setup-list mb-0 ps-3 text-secondary">
+                <li class="mb-2">{{ i18nService.get('guide.apiSetupOpenAIStep1') }}</li>
+                <li class="mb-0">{{ i18nService.get('guide.apiSetupOpenAIStep2') }}</li>
+              </ol>
+            </div>
+          </section>
+
+          <!-- Section 4: Push-to-Talk Controls -->
+          <section id="controls" class="guide-section mb-5">
+            <div class="d-flex align-items-center gap-2 mb-3">
+              <div class="section-icon-badge d-flex align-items-center justify-content-center">
+                <i class="bi bi-mic-fill text-danger" aria-hidden="true"></i>
+              </div>
+              <h2 class="fs-4 fw-bold m-0 text-primary">{{ i18nService.get('guide.controlsTitle') }}</h2>
+            </div>
+
+            <div class="content-card p-4 rounded-3">
+              <ul class="list-unstyled mb-0 d-flex flex-column gap-3">
+                <li class="d-flex align-items-start gap-3">
+                  <i class="bi bi-hand-index-thumb-fill text-primary fs-5 mt-1" aria-hidden="true"></i>
+                  <span class="text-secondary">{{ i18nService.get('guide.controlsHold') }}</span>
+                </li>
+                <li class="d-flex align-items-start gap-3">
+                  <i class="bi bi-cursor-fill text-primary fs-5 mt-1" aria-hidden="true"></i>
+                  <span class="text-secondary">{{ i18nService.get('guide.controlsClick') }}</span>
+                </li>
+                <li class="d-flex align-items-start gap-3">
+                  <i class="bi bi-soundwave text-success fs-5 mt-1" aria-hidden="true"></i>
+                  <span class="text-secondary">{{ i18nService.get('guide.controlsWaveform') }}</span>
+                </li>
+              </ul>
+            </div>
+          </section>
+
+          <!-- Section 5: Security & Privacy -->
+          <section id="security" class="guide-section mb-5">
+            <div class="d-flex align-items-center gap-2 mb-3">
+              <div class="section-icon-badge d-flex align-items-center justify-content-center">
+                <i class="bi bi-shield-lock-fill text-success" aria-hidden="true"></i>
+              </div>
+              <h2 class="fs-4 fw-bold m-0 text-primary">{{ i18nService.get('guide.securityTitle') }}</h2>
+            </div>
+
+            <div class="content-card p-4 rounded-3">
+              <ul class="list-unstyled mb-0 d-flex flex-column gap-3">
+                <li class="d-flex align-items-start gap-3">
+                  <i class="bi bi-lock-fill text-success fs-5 mt-1" aria-hidden="true"></i>
+                  <span class="text-secondary">{{ i18nService.get('guide.securityContext') }}</span>
+                </li>
+                <li class="d-flex align-items-start gap-3">
+                  <i class="bi bi-power text-danger fs-5 mt-1" aria-hidden="true"></i>
+                  <span class="text-secondary">{{ i18nService.get('guide.securityTeardown') }}</span>
+                </li>
+              </ul>
+            </div>
+          </section>
+
+        </article>
+      </main>
+
+    </div>
+  </div>
+</div>

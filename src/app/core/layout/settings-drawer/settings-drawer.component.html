@@ -1,0 +1,236 @@
+<!-- Backdrop Overlay -->
+@if (apiConfigService.isDrawerOpen()) {
+  <div class="drawer-backdrop" (click)="close()" aria-hidden="true"></div>
+}
+
+<!-- Slide-out Drawer Panel -->
+<aside 
+  class="settings-drawer-panel shadow-2xl d-flex flex-column"
+  [class.is-open]="apiConfigService.isDrawerOpen()"
+  role="dialog"
+  [attr.aria-hidden]="!apiConfigService.isDrawerOpen()"
+  aria-labelledby="settings-drawer-title">
+  
+  <!-- Drawer Header -->
+  <div class="drawer-header d-flex align-items-center justify-content-between p-4 border-bottom">
+    <div class="d-flex align-items-center gap-2">
+      <div class="drawer-icon-wrap d-flex align-items-center justify-content-center">
+        <i class="bi bi-gear-fill text-primary fs-5" aria-hidden="true"></i>
+      </div>
+      <h2 id="settings-drawer-title" class="fs-5 fw-bold m-0 text-primary">
+        {{ i18nService.get('drawer.title') }}
+      </h2>
+    </div>
+    
+    <button 
+      type="button" 
+      class="btn btn-close-drawer touch-action-target rounded-circle border-0"
+      (click)="close()"
+      [attr.aria-label]="i18nService.get('drawer.closeAria')">
+      <i class="bi bi-x-lg fs-5" aria-hidden="true"></i>
+    </button>
+  </div>
+
+  <!-- Drawer Body (Scrollable) -->
+  <div class="drawer-body flex-grow-1 p-4 overflow-y-auto">
+    
+    <!-- 1. Appearance & Theme Section -->
+    <section class="settings-section mb-4 pb-4 border-bottom">
+      <div class="d-flex align-items-center gap-2 mb-2">
+        <i class="bi bi-palette-fill text-primary" aria-hidden="true"></i>
+        <h3 class="fs-6 fw-bold m-0">{{ i18nService.get('drawer.appearance') }}</h3>
+      </div>
+      <p class="small text-muted mb-3">{{ i18nService.get('drawer.themeDescription') }}</p>
+
+      <!-- Theme Segmented Control -->
+      <div class="theme-segmented-control d-flex p-1 rounded-3">
+        <button 
+          type="button" 
+          class="btn theme-seg-btn flex-grow-1 d-flex align-items-center justify-content-center gap-2 py-2 rounded-2"
+          [class.active]="themeService.currentTheme() === AppTheme.LIGHT"
+          (click)="setTheme(AppTheme.LIGHT)">
+          <i class="bi bi-sun-fill text-warning" aria-hidden="true"></i>
+          <span class="small fw-semibold">{{ i18nService.get('drawer.themeLight') }}</span>
+        </button>
+
+        <button 
+          type="button" 
+          class="btn theme-seg-btn flex-grow-1 d-flex align-items-center justify-content-center gap-2 py-2 rounded-2"
+          [class.active]="themeService.currentTheme() === AppTheme.DARK"
+          (click)="setTheme(AppTheme.DARK)">
+          <i class="bi bi-moon-stars-fill text-primary" aria-hidden="true"></i>
+          <span class="small fw-semibold">{{ i18nService.get('drawer.themeDark') }}</span>
+        </button>
+
+        <button 
+          type="button" 
+          class="btn theme-seg-btn flex-grow-1 d-flex align-items-center justify-content-center gap-2 py-2 rounded-2"
+          [class.active]="themeService.currentTheme() === AppTheme.SYSTEM"
+          (click)="setTheme(AppTheme.SYSTEM)">
+          <i class="bi bi-display text-secondary" aria-hidden="true"></i>
+          <span class="small fw-semibold">{{ i18nService.get('drawer.themeSystem') }}</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- 2. AI Model & API Connections Section -->
+    <section class="settings-section">
+      <div class="d-flex align-items-center justify-content-between mb-2">
+        <div class="d-flex align-items-center gap-2">
+          <i class="bi bi-cpu-fill text-primary" aria-hidden="true"></i>
+          <h3 class="fs-6 fw-bold m-0">{{ i18nService.get('drawer.aiProvider') }}</h3>
+        </div>
+      </div>
+      <p class="small text-muted mb-3">{{ i18nService.get('drawer.providerDescription') }}</p>
+
+      <!-- Provider Tabs -->
+      <div class="provider-tabs-wrapper d-flex gap-2 p-1 rounded-3 mb-3">
+        <button 
+          type="button"
+          class="btn provider-tab-btn flex-grow-1 d-flex flex-column align-items-center py-2 rounded-2"
+          [class.active]="currentTab() === AiProvider.GROQ"
+          (click)="selectTab(AiProvider.GROQ)">
+          <span class="fw-bold small">{{ i18nService.get('drawer.groqTab') }}</span>
+          <span class="tab-badge" [class.badge-active]="apiConfigService.hasKey(AiProvider.GROQ)">
+            {{ apiConfigService.hasKey(AiProvider.GROQ) ? i18nService.get('drawer.statusConnected') : i18nService.get('drawer.statusSandbox') }}
+          </span>
+        </button>
+
+        <button 
+          type="button"
+          class="btn provider-tab-btn flex-grow-1 d-flex flex-column align-items-center py-2 rounded-2"
+          [class.active]="currentTab() === AiProvider.OPENAI"
+          (click)="selectTab(AiProvider.OPENAI)">
+          <span class="fw-bold small">{{ i18nService.get('drawer.openaiTab') }}</span>
+          <span class="tab-badge" [class.badge-active]="apiConfigService.hasKey(AiProvider.OPENAI)">
+            {{ apiConfigService.hasKey(AiProvider.OPENAI) ? i18nService.get('drawer.statusConnected') : i18nService.get('drawer.statusNotSet') }}
+          </span>
+        </button>
+
+        <button 
+          type="button"
+          class="btn provider-tab-btn flex-grow-1 d-flex flex-column align-items-center py-2 rounded-2"
+          [class.active]="currentTab() === AiProvider.ELEVENLABS"
+          (click)="selectTab(AiProvider.ELEVENLABS)">
+          <span class="fw-bold small">{{ i18nService.get('drawer.elevenlabsTab') }}</span>
+          <span class="tab-badge" [class.badge-active]="apiConfigService.hasKey(AiProvider.ELEVENLABS)">
+            {{ apiConfigService.hasKey(AiProvider.ELEVENLABS) ? i18nService.get('drawer.statusConnected') : i18nService.get('drawer.statusNotSet') }}
+          </span>
+        </button>
+      </div>
+
+      <!-- Provider Description Box -->
+      <div class="provider-info-box p-3 rounded-3 mb-3">
+        <p class="small m-0 text-secondary">
+          @switch (currentTab()) {
+            @case (AiProvider.GROQ) {
+              {{ i18nService.get('drawer.groqNote') }}
+            }
+            @case (AiProvider.OPENAI) {
+              {{ i18nService.get('drawer.openaiNote') }}
+            }
+            @case (AiProvider.ELEVENLABS) {
+              {{ i18nService.get('drawer.elevenlabsNote') }}
+            }
+          }
+        </p>
+        
+        <div class="mt-2">
+          @if (currentTab() === AiProvider.GROQ) {
+            <a href="https://console.groq.com/keys" target="_blank" rel="noopener noreferrer" class="small text-primary text-decoration-none fw-semibold d-inline-flex align-items-center gap-1">
+              {{ i18nService.get('drawer.getKeyLink') }} <i class="bi bi-box-arrow-up-right small"></i>
+            </a>
+          } @else if (currentTab() === AiProvider.OPENAI) {
+            <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer" class="small text-primary text-decoration-none fw-semibold d-inline-flex align-items-center gap-1">
+              {{ i18nService.get('drawer.getKeyLink') }} <i class="bi bi-box-arrow-up-right small"></i>
+            </a>
+          } @else if (currentTab() === AiProvider.ELEVENLABS) {
+            <a href="https://elevenlabs.io/app/settings/api-keys" target="_blank" rel="noopener noreferrer" class="small text-primary text-decoration-none fw-semibold d-inline-flex align-items-center gap-1">
+              {{ i18nService.get('drawer.getKeyLink') }} <i class="bi bi-box-arrow-up-right small"></i>
+            </a>
+          }
+        </div>
+      </div>
+
+      <!-- API Key Input Field -->
+      <div class="mb-3">
+        <label for="apiKeyInput" class="form-label small fw-semibold text-secondary">
+          {{ i18nService.get('drawer.apiKeyLabel') }}
+        </label>
+        
+        <div class="input-group">
+          <input 
+            id="apiKeyInput"
+            [type]="showPassword() ? 'text' : 'password'"
+            class="form-control key-input rounded-start-3"
+            [placeholder]="i18nService.get('drawer.apiKeyPlaceholder')"
+            [ngModel]="inputKey()"
+            (ngModelChange)="inputKey.set($event)"
+            autocomplete="off"
+            spellcheck="false" />
+          
+          <button 
+            type="button" 
+            class="btn btn-input-addon"
+            (click)="toggleShowPassword()"
+            [attr.aria-label]="showPassword() ? i18nService.get('drawer.hideKey') : i18nService.get('drawer.showKey')">
+            <i class="bi" [ngClass]="showPassword() ? 'bi-eye-slash-fill' : 'bi-eye-fill'"></i>
+          </button>
+
+          @if (inputKey()) {
+            <button 
+              type="button" 
+              class="btn btn-input-addon"
+              (click)="clearKey()"
+              [attr.aria-label]="i18nService.get('drawer.clearKey')">
+              <i class="bi bi-x-circle-fill text-muted"></i>
+            </button>
+          } @else {
+            <button 
+              type="button" 
+              class="btn btn-input-addon"
+              (click)="pasteFromClipboard()"
+              title="Paste from clipboard">
+              <i class="bi bi-clipboard-fill"></i>
+            </button>
+          }
+        </div>
+      </div>
+
+      <!-- Validation Error Feedback -->
+      @if (validationError()) {
+        <div class="alert alert-danger d-flex align-items-center gap-2 mb-3 py-2 px-3 rounded-3 small" role="alert">
+          <i class="bi bi-exclamation-triangle-fill fs-6 text-danger" aria-hidden="true"></i>
+          <span>{{ validationError() }}</span>
+        </div>
+      }
+
+      <!-- Save & Verify Action Button -->
+      <button 
+        type="button" 
+        class="btn btn-primary w-100 py-2 rounded-3 d-flex align-items-center justify-content-center gap-2 fw-semibold"
+        [disabled]="isVerifying()"
+        (click)="saveKey()">
+        @if (isVerifying()) {
+          <div class="spinner-border spinner-border-sm text-white" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <span>{{ i18nService.get('drawer.verifyingKey') }}</span>
+        } @else {
+          <i class="bi bi-shield-check fs-5" aria-hidden="true"></i>
+          <span>{{ i18nService.get('drawer.saveKey') }}</span>
+        }
+      </button>
+
+      <!-- Save Success Feedback -->
+      @if (saveSuccess()) {
+        <div class="alert alert-success d-flex align-items-center gap-2 mt-3 py-2 px-3 rounded-3 small" role="alert">
+          <i class="bi bi-check-circle-fill fs-6" aria-hidden="true"></i>
+          <span>{{ i18nService.get('drawer.keySavedSuccess') }}</span>
+        </div>
+      }
+
+    </section>
+
+  </div>
+</aside>

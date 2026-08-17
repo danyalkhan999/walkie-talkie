@@ -17,6 +17,13 @@ export enum AppTheme {
   SYSTEM = 'system'
 }
 
+export enum AiProvider {
+  GROQ = 'groq',
+  OPENAI = 'openai',
+  ELEVENLABS = 'elevenlabs',
+  BROWSER_DEMO = 'browser_demo'
+}
+
 export interface LanguageOption {
   code: string;
   name: string;
@@ -52,13 +59,29 @@ export const DEFAULT_SOURCE_LANGUAGE = 'en';
 export const DEFAULT_TARGET_LANGUAGE = 'es';
 export const DEFAULT_APP_LANGUAGE = 'en';
 export const DEFAULT_THEME = AppTheme.DARK;
+export const DEFAULT_AI_PROVIDER = AiProvider.GROQ;
 
 // Storage Keys
 export const STORAGE_KEYS = {
   THEME: 'echotranslate_theme_preference',
   APP_LANGUAGE: 'echotranslate_app_language',
   SOURCE_LANGUAGE: 'echotranslate_source_language',
-  TARGET_LANGUAGE: 'echotranslate_target_language'
+  TARGET_LANGUAGE: 'echotranslate_target_language',
+  ACTIVE_AI_PROVIDER: 'echotranslate_active_provider',
+  GROQ_API_KEY: 'echotranslate_groq_key',
+  OPENAI_API_KEY: 'echotranslate_openai_key',
+  ELEVENLABS_API_KEY: 'echotranslate_elevenlabs_key'
+} as const;
+
+// API Endpoints & Models
+export const API_ENDPOINTS = {
+  GROQ_STT: 'https://api.groq.com/openai/v1/audio/transcriptions',
+  OPENAI_STT: 'https://api.openai.com/v1/audio/transcriptions'
+} as const;
+
+export const AI_MODELS = {
+  GROQ_STT: 'whisper-large-v3',
+  OPENAI_STT: 'whisper-1'
 } as const;
 
 // Timing & Duration Configurations
@@ -69,6 +92,30 @@ export const APP_TIMINGS = {
   SEARCH_DEBOUNCE_MS: 200
 } as const;
 
+// Audio Hardware & Recording Configurations
+export const AUDIO_CONFIG = {
+  MIN_RECORDING_DURATION_MS: 350,
+  TIMESLICE_MS: 200,
+  MIME_TYPE_CANDIDATES: [
+    'audio/webm;codecs=opus',
+    'audio/webm',
+    'audio/mp4',
+    'audio/ogg;codecs=opus',
+    'audio/wav'
+  ],
+  FFT_SIZE: 128,
+  SMOOTHING_TIME_CONSTANT: 0.8
+} as const;
+
+// SEO Metadata Defaults
+export const SEO_DEFAULTS = {
+  SITE_NAME: 'EchoTranslate',
+  TITLE_WALKIE_TALKIE: 'EchoTranslate • Real-Time AI Voice Walkie-Talkie Translator',
+  TITLE_GUIDE: 'Documentation & Setup Guide • EchoTranslate',
+  DESCRIPTION_WALKIE_TALKIE: 'Instant speech-to-speech AI voice translator with Push-to-Talk controls, browser native WebRTC audio capture, and high-speed multi-language translation.',
+  DESCRIPTION_GUIDE: 'Complete developer and user guide for EchoTranslate: API connection setup (Groq, OpenAI, ElevenLabs), architecture overview, and Push-to-Talk walkie-talkie controls.'
+} as const;
+
 // Log Prefixes for structured debugging and tracing
 export const LOG_PREFIXES = {
   ACTION: '[EchoTranslate][Action]',
@@ -76,5 +123,7 @@ export const LOG_PREFIXES = {
   THEME: '[EchoTranslate][Theme]',
   I18N: '[EchoTranslate][i18n]',
   HARDWARE: '[EchoTranslate][Hardware]',
-  NETWORK: '[EchoTranslate][Network]'
+  NETWORK: '[EchoTranslate][Network]',
+  API: '[EchoTranslate][API]',
+  SEO: '[EchoTranslate][SEO]'
 } as const;
