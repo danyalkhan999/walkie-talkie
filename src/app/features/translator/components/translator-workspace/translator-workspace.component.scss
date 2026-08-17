@@ -1,0 +1,207 @@
+@use 'styles/variables' as *;
+
+.workspace-wrapper {
+  background-color: $color-bg-primary;
+  min-height: calc(100vh - #{$header-height});
+  color: $color-text-primary;
+  transition: $transition-smooth;
+}
+
+.max-width-xl {
+  max-width: 1200px;
+}
+
+.workspace-grid-layout {
+  gap: 0;
+  width: 100%;
+}
+
+.card-column {
+  flex: 1 1 0;
+  min-width: 0; // prevents flex children from overflowing
+}
+
+.translation-card {
+  background-color: var(--color-bg-surface);
+  border: 1px solid $color-border;
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  min-height: 400px;
+  box-shadow: $color-card-shadow;
+  transition: $transition-smooth;
+  
+  &--active {
+    border-color: rgba(239, 68, 68, 0.5);
+    box-shadow: 0 0 24px $color-glow-active;
+  }
+
+  &--playing {
+    border-color: rgba(16, 185, 129, 0.5);
+    box-shadow: 0 0 24px rgba(16, 185, 129, 0.2);
+  }
+}
+
+.label-tag {
+  color: $color-text-secondary;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  font-size: 0.75rem;
+}
+
+.spoken-text,
+.translated-text {
+  color: $color-text-primary;
+  word-break: break-word;
+}
+
+.placeholder-hint {
+  color: $color-text-muted;
+  user-select: none;
+}
+
+/* Central Swap Bridge */
+.swap-bridge-container {
+  position: relative;
+  min-width: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.swap-bridge-line {
+  position: absolute;
+  top: 15%;
+  bottom: 15%;
+  left: 50%;
+  width: 1px;
+  background: linear-gradient(
+    180deg, 
+    transparent 0%, 
+    $color-border 20%, 
+    $color-border 80%, 
+    transparent 100%
+  );
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+.swap-circle-btn {
+  position: relative;
+  z-index: 2;
+  background-color: $color-brand-primary;
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-full);
+  box-shadow: 0 6px 20px $color-glow-primary;
+  transition: $transition-smooth;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $color-brand-primary-hover;
+    transform: scale(1.12) rotate(180deg);
+    box-shadow: 0 8px 24px $color-glow-primary;
+  }
+
+  &:active {
+    transform: scale(0.95) rotate(180deg);
+  }
+}
+
+/* Push-to-Talk Mic Action Button */
+.mic-action-button {
+  width: $mic-btn-size-mobile;
+  height: $mic-btn-size-mobile;
+  min-width: $touch-target-minimum;
+  min-height: $touch-target-minimum;
+  border-radius: var(--radius-full);
+  background-color: $color-brand-primary;
+  box-shadow: 0 4px 16px $color-glow-primary;
+  transition: $transition-smooth;
+  cursor: pointer;
+
+  @media (min-width: 992px) {
+    width: $mic-btn-size-desktop;
+    height: $mic-btn-size-desktop;
+  }
+
+  &:hover:not(.is-recording) {
+    background-color: $color-brand-primary-hover;
+    transform: scale(1.04);
+  }
+
+  &.is-recording {
+    background-color: $color-brand-active;
+    box-shadow: 0 0 24px $color-glow-active;
+    transform: scale(1.06);
+    animation: pulse-ring 1.5s infinite;
+  }
+
+  &.is-processing {
+    background-color: $color-brand-processing;
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5);
+  }
+  70% {
+    box-shadow: 0 0 0 20px rgba(239, 68, 68, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+  }
+}
+
+/* Action Icon Buttons */
+.action-icon-btn {
+  width: 44px;
+  height: 44px;
+  background-color: var(--color-bg-elevated);
+  color: $color-text-primary;
+  transition: $transition-fast;
+
+  &:hover:not(:disabled) {
+    background-color: var(--color-bg-surface-hover);
+    color: $color-brand-primary;
+    transform: scale(1.08);
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+/* Shimmer placeholder */
+.shimmer-bar {
+  display: block;
+  height: 20px;
+  background-color: var(--color-bg-elevated);
+}
+
+/* Copy Toast */
+.toast-feedback {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--color-bg-surface);
+  color: $color-text-primary;
+  border: 1px solid $color-border;
+  z-index: 1060;
+  animation: slide-up 0.25s ease-out;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 15px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "app": {
+    "title": "EchoTranslate",
+    "subtitle": "Voice Walkie-Talkie",
+    "badge": "Walkie-Talkie",
+    "version": "v1.0"
+  },
+  "status": {
+    "idle": "Ready",
+    "requesting_permission": "Requesting Mic Access...",
+    "recording": "Listening...",
+    "processing": "Translating...",
+    "playing": "Speaking...",
+    "error": "Error Occurred"
+  },
+  "workspace": {
+    "fromLabel": "FROM",
+    "toLabel": "TO",
+    "sourcePlaceholder": "Tap the microphone and begin speaking...",
+    "sourceListening": "Listening to your voice...",
+    "targetPlaceholder": "Translation will appear here...",
+    "swapLanguages": "Swap translation source and target languages",
+    "recordButtonAria": "Toggle speech recording",
+    "playOutputAria": "Play translated voice output",
+    "copyOutputAria": "Copy translated text",
+    "copiedSuccess": "Copied to clipboard!",
+    "statusIndicator": "Engine Status"
+  },
+  "languages": {
+    "searchPlaceholder": "Search language...",
+    "noResults": "No matching language found",
+    "selectLanguage": "Select language",
+    "en": "English",
+    "es": "Spanish",
+    "fr": "French",
+    "de": "German",
+    "hi": "Hindi",
+    "ja": "Japanese",
+    "zh": "Chinese",
+    "pt": "Portuguese",
+    "it": "Italian",
+    "ar": "Arabic",
+    "ru": "Russian",
+    "ko": "Korean"
+  },
+  "theme": {
+    "toggleAria": "Toggle Light/Dark theme",
+    "light": "Light Mode",
+    "dark": "Dark Mode",
+    "system": "System Theme"
+  },
+  "errors": {
+    "micPermissionDenied": "Microphone permission was denied. Please allow microphone access in your browser settings.",
+    "networkError": "Network request failed. Please check your internet connection.",
+    "timeout": "Translation request timed out. Please try speaking again.",
+    "dismiss": "Dismiss"
+  },
+  "footer": {
+    "tagline": "Real-time AI Voice-to-Voice Walkie-Talkie"
+  }
+}

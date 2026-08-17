@@ -1,0 +1,71 @@
+<div class="language-selector-wrapper position-relative">
+  <!-- Trigger Button -->
+  <button 
+    type="button" 
+    class="lang-trigger-btn btn d-flex align-items-center justify-content-between gap-2 px-3 py-2 rounded-3"
+    (click)="toggleDropdown()"
+    [attr.aria-expanded]="isOpen()"
+    [attr.aria-label]="i18nService.get('languages.selectLanguage')">
+    <div class="d-flex align-items-center gap-2">
+      <span class="flag-icon fs-5">{{ selectedLanguage().flag }}</span>
+      <div class="d-flex flex-column text-start">
+        <span class="fw-semibold selected-lang-name">{{ selectedLanguage().name }}</span>
+        <span class="selected-lang-native small">{{ selectedLanguage().nativeName }}</span>
+      </div>
+    </div>
+    <i class="bi bi-chevron-down chevron-icon ms-2" [class.rotated]="isOpen()" aria-hidden="true"></i>
+  </button>
+
+  <!-- Backdrop for click outside -->
+  @if (isOpen()) {
+    <div class="dropdown-backdrop" (click)="closeDropdown()"></div>
+  }
+
+  <!-- Dropdown Menu -->
+  @if (isOpen()) {
+    <div class="lang-dropdown-panel rounded-3 shadow-lg p-2" role="listbox">
+      
+      <!-- Search Input -->
+      <div class="search-input-wrapper position-relative mb-2">
+        <i class="bi bi-search search-icon position-absolute top-50 start-0 translate-middle-y ms-3" aria-hidden="true"></i>
+        <input 
+          type="text" 
+          class="form-control lang-search-input rounded-3 ps-5 pe-3 py-2"
+          [placeholder]="i18nService.get('languages.searchPlaceholder')"
+          [ngModel]="searchQuery()"
+          (ngModelChange)="onSearchChange($event)"
+          (keydown.escape)="closeDropdown()"
+          autofocus />
+      </div>
+
+      <!-- Languages List -->
+      <div class="languages-list-container">
+        @if (filteredLanguages().length === 0) {
+          <div class="p-3 text-center small text-muted">
+            {{ i18nService.get('languages.noResults') }}
+          </div>
+        } @else {
+          @for (lang of filteredLanguages(); track lang.code) {
+            <button 
+              type="button" 
+              class="lang-item-btn d-flex align-items-center justify-content-between w-100 p-2 rounded-2 border-0"
+              [class.active]="lang.code === currentSelectedCode()"
+              (click)="selectLanguage(lang)">
+              <div class="d-flex align-items-center gap-2">
+                <span class="flag-icon fs-5">{{ lang.flag }}</span>
+                <div class="d-flex flex-column text-start">
+                  <span class="lang-name fw-medium">{{ lang.name }}</span>
+                  <span class="lang-native small">{{ lang.nativeName }}</span>
+                </div>
+              </div>
+              @if (lang.code === currentSelectedCode()) {
+                <i class="bi bi-check-circle-fill text-primary" aria-hidden="true"></i>
+              }
+            </button>
+          }
+        }
+      </div>
+
+    </div>
+  }
+</div>

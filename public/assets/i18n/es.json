@@ -1,0 +1,61 @@
+{
+  "app": {
+    "title": "EchoTranslate",
+    "subtitle": "Walkie-Talkie de Voz",
+    "badge": "Walkie-Talkie",
+    "version": "v1.0"
+  },
+  "status": {
+    "idle": "Listo",
+    "requesting_permission": "Solicitando acceso al micrófono...",
+    "recording": "Escuchando...",
+    "processing": "Traduciendo...",
+    "playing": "Hablando...",
+    "error": "Ocurrió un error"
+  },
+  "workspace": {
+    "fromLabel": "DE",
+    "toLabel": "A",
+    "sourcePlaceholder": "Toca el micrófono y comienza a hablar...",
+    "sourceListening": "Escuchando tu voz...",
+    "targetPlaceholder": "La traducción aparecerá aquí...",
+    "swapLanguages": "Intercambiar idiomas de origen y destino",
+    "recordButtonAria": "Alternar grabación de voz",
+    "playOutputAria": "Reproducir salida de voz traducida",
+    "copyOutputAria": "Copiar texto traducido",
+    "copiedSuccess": "¡Copiado al portapapeles!",
+    "statusIndicator": "Estado del motor"
+  },
+  "languages": {
+    "searchPlaceholder": "Buscar idioma...",
+    "noResults": "No se encontró ningún idioma coincidente",
+    "selectLanguage": "Seleccionar idioma",
+    "en": "Inglés",
+    "es": "Español",
+    "fr": "Francés",
+    "de": "Alemán",
+    "hi": "Hindi",
+    "ja": "Japonés",
+    "zh": "Chino",
+    "pt": "Portugués",
+    "it": "Italiano",
+    "ar": "Árabe",
+    "ru": "Ruso",
+    "ko": "Coreano"
+  },
+  "theme": {
+    "toggleAria": "Alternar tema claro/oscuro",
+    "light": "Modo Claro",
+    "dark": "Modo Oscuro",
+    "system": "Tema del Sistema"
+  },
+  "errors": {
+    "micPermissionDenied": "Se denegó el permiso del micrófono. Permita el acceso al micrófono en la configuración de su navegador.",
+    "networkError": "Falló la solicitud de red. Verifique su conexión a Internet.",
+    "timeout": "Se agotó el tiempo de espera de la solicitud de traducción. Intente hablar de nuevo.",
+    "dismiss": "Descartar"
+  },
+  "footer": {
+    "tagline": "Walkie-Talkie de Voz a Voz con IA en tiempo real"
+  }
+}

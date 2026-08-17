@@ -1,0 +1,61 @@
+{
+  "app": {
+    "title": "EchoTranslate",
+    "subtitle": "Sprach-Walkie-Talkie",
+    "badge": "Walkie-Talkie",
+    "version": "v1.0"
+  },
+  "status": {
+    "idle": "Bereit",
+    "requesting_permission": "Mikrofonzugriff anfordern...",
+    "recording": "Zuhören...",
+    "processing": "Übersetzen...",
+    "playing": "Sprechen...",
+    "error": "Fehler aufgetreten"
+  },
+  "workspace": {
+    "fromLabel": "VON",
+    "toLabel": "NACH",
+    "sourcePlaceholder": "Tippen Sie auf das Mikrofon und sprechen Sie...",
+    "sourceListening": "Höre Ihre Stimme...",
+    "targetPlaceholder": "Übersetzung erscheint hier...",
+    "swapLanguages": "Quell- und Zielsprache tauschen",
+    "recordButtonAria": "Sprachaufnahme umschalten",
+    "playOutputAria": "Übersetzte Sprachausgabe abspielen",
+    "copyOutputAria": "Übersetzten Text kopieren",
+    "copiedSuccess": "In die Zwischenablage kopiert!",
+    "statusIndicator": "Engine-Status"
+  },
+  "languages": {
+    "searchPlaceholder": "Sprache suchen...",
+    "noResults": "Keine passende Sprache gefunden",
+    "selectLanguage": "Sprache auswählen",
+    "en": "Englisch",
+    "es": "Spanisch",
+    "fr": "Französisch",
+    "de": "Deutsch",
+    "hi": "Hindi",
+    "ja": "Japanisch",
+    "zh": "Chinesisch",
+    "pt": "Portugiesisch",
+    "it": "Italienisch",
+    "ar": "Arabisch",
+    "ru": "Russisch",
+    "ko": "Koreanisch"
+  },
+  "theme": {
+    "toggleAria": "Helles/Dunkles Design umschalten",
+    "light": "Heller Modus",
+    "dark": "Dunkler Modus",
+    "system": "Systemdesign"
+  },
+  "errors": {
+    "micPermissionDenied": "Mikrofonberechtigung verweigert. Bitte erlauben Sie den Zugriff in Ihren Browsereinstellungen.",
+    "networkError": "Netzwerkanforderung fehlgeschlagen. Bitte überprüfen Sie Ihre Internetverbindung.",
+    "timeout": "Zeitüberschreitung der Übersetzungsanforderung. Bitte erneut sprechen.",
+    "dismiss": "Schließen"
+  },
+  "footer": {
+    "tagline": "Echtzeit-KI-Sprach-zu-Sprach-Walkie-Talkie"
+  }
+}

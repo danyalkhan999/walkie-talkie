@@ -1,0 +1,114 @@
+@use 'styles/variables' as *;
+
+.language-selector-wrapper {
+  position: relative;
+}
+
+.lang-trigger-btn {
+  background-color: var(--color-bg-elevated);
+  border: 1px solid $color-border;
+  color: $color-text-primary;
+  min-width: 170px;
+  transition: $transition-fast;
+
+  &:hover {
+    background-color: var(--color-bg-surface-hover);
+    border-color: $color-border-hover;
+    color: $color-text-primary;
+  }
+
+  .selected-lang-name {
+    color: $color-text-primary;
+    font-size: 0.9rem;
+    line-height: 1.2;
+  }
+
+  .selected-lang-native {
+    color: $color-text-secondary;
+    font-size: 0.725rem;
+  }
+
+  .chevron-icon {
+    font-size: 0.8rem;
+    color: $color-text-secondary;
+    transition: transform 0.2s ease;
+
+    &.rotated {
+      transform: rotate(180deg);
+    }
+  }
+}
+
+.dropdown-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1040;
+  background: transparent;
+}
+
+.lang-dropdown-panel {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  width: 260px;
+  max-width: calc(100vw - 32px);
+  background-color: var(--color-bg-surface);
+  border: 1px solid $color-border;
+  box-shadow: $color-card-shadow;
+  z-index: 1050;
+  backdrop-filter: blur(16px);
+}
+
+.lang-search-input {
+  background-color: var(--color-bg-elevated);
+  border: 1px solid $color-border;
+  color: $color-text-primary;
+  font-size: 0.85rem;
+
+  &:focus {
+    background-color: var(--color-bg-elevated);
+    border-color: $color-brand-primary;
+    color: $color-text-primary;
+    box-shadow: 0 0 0 2px $color-glow-primary;
+  }
+
+  &::placeholder {
+    color: $color-text-muted;
+  }
+}
+
+.search-icon {
+  color: $color-text-muted;
+  font-size: 0.85rem;
+}
+
+.languages-list-container {
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.lang-item-btn {
+  background: transparent;
+  color: $color-text-primary;
+  cursor: pointer;
+  transition: $transition-fast;
+  text-align: left;
+
+  &:hover {
+    background-color: var(--color-bg-surface-hover);
+  }
+
+  &.active {
+    background-color: var(--color-bg-elevated);
+  }
+
+  .lang-name {
+    font-size: 0.875rem;
+    color: $color-text-primary;
+  }
+
+  .lang-native {
+    font-size: 0.725rem;
+    color: $color-text-secondary;
+  }
+}

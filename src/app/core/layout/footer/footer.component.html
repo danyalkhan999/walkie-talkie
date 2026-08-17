@@ -1,0 +1,28 @@
+<footer class="app-footer py-3 border-top">
+  <div class="container-fluid px-3 px-md-4">
+    <div class="d-flex flex-column flex-md-row align-items-center justify-content-between gap-2 footer-inner">
+      
+      <!-- Brand & Copy Notice -->
+      <div class="d-flex align-items-center gap-2 footer-brand">
+        <i class="bi bi-soundwave text-primary" aria-hidden="true"></i>
+        <span class="small text-secondary">
+          &copy; {{ currentYear }} <strong>{{ i18nService.get('app.title') }}</strong> — {{ i18nService.get('footer.tagline') }}
+        </span>
+      </div>
+
+      <!-- Tech Architecture Badges -->
+      <div class="d-flex align-items-center gap-2 footer-badges">
+        <span class="badge tech-badge">
+          <i class="bi bi-lightning-charge-fill me-1" aria-hidden="true"></i>CSR Only
+        </span>
+        <span class="badge tech-badge">
+          <i class="bi bi-mic-fill me-1" aria-hidden="true"></i>Native MediaRecorder
+        </span>
+        <span class="badge tech-badge d-none d-sm-inline-block">
+          <i class="bi bi-cpu-fill me-1" aria-hidden="true"></i>RxJS State Engine
+        </span>
+      </div>
+
+    </div>
+  </div>
+</footer>

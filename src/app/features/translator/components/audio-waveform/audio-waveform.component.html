@@ -1,0 +1,5 @@
+<div class="waveform-container d-flex align-items-center gap-1" [attr.data-color]="activeColor" aria-hidden="true">
+  @for (bar of bars; track bar) {
+    <span class="waveform-bar" [style.animation-delay.ms]="bar * 120"></span>
+  }
+</div>

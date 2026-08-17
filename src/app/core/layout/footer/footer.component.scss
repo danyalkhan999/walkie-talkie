@@ -1,0 +1,27 @@
+@use 'styles/variables' as *;
+
+.app-footer {
+  background-color: var(--color-bg-surface);
+  border-color: $color-border !important;
+  color: $color-text-secondary;
+  transition: $transition-smooth;
+}
+
+.footer-inner {
+  min-height: 38px;
+}
+
+.tech-badge {
+  background-color: var(--color-bg-elevated);
+  color: $color-text-secondary;
+  border: 1px solid $color-border;
+  font-weight: 500;
+  font-size: 0.725rem;
+  padding: 0.35em 0.65em;
+  transition: $transition-fast;
+
+  &:hover {
+    color: $color-brand-primary;
+    border-color: $color-border-hover;
+  }
+}

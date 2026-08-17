@@ -1,0 +1,61 @@
+{
+  "app": {
+    "title": "EchoTranslate",
+    "subtitle": "Talkie-Walkie Vocal",
+    "badge": "Talkie-Walkie",
+    "version": "v1.0"
+  },
+  "status": {
+    "idle": "Prêt",
+    "requesting_permission": "Demande d'accès au micro...",
+    "recording": "Écoute en cours...",
+    "processing": "Traduction en cours...",
+    "playing": "Lecture audio...",
+    "error": "Une erreur est survenue"
+  },
+  "workspace": {
+    "fromLabel": "DE",
+    "toLabel": "À",
+    "sourcePlaceholder": "Appuyez sur le micro et commencez à parler...",
+    "sourceListening": "Écoute de votre voix...",
+    "targetPlaceholder": "La traduction apparaîtra ici...",
+    "swapLanguages": "Échanger les langues source et cible",
+    "recordButtonAria": "Basculer l'enregistrement vocal",
+    "playOutputAria": "Écouter la traduction vocale",
+    "copyOutputAria": "Copier le texte traduit",
+    "copiedSuccess": "Copié dans le presse-papiers !",
+    "statusIndicator": "État du moteur"
+  },
+  "languages": {
+    "searchPlaceholder": "Rechercher une langue...",
+    "noResults": "Aucune langue correspondante",
+    "selectLanguage": "Sélectionner la langue",
+    "en": "Anglais",
+    "es": "Espagnol",
+    "fr": "Français",
+    "de": "Allemand",
+    "hi": "Hindi",
+    "ja": "Japonais",
+    "zh": "Chinois",
+    "pt": "Portugais",
+    "it": "Italien",
+    "ar": "Arabe",
+    "ru": "Russe",
+    "ko": "Coréen"
+  },
+  "theme": {
+    "toggleAria": "Basculer le thème clair/sombre",
+    "light": "Mode Clair",
+    "dark": "Mode Sombre",
+    "system": "Thème Système"
+  },
+  "errors": {
+    "micPermissionDenied": "Autorisation du micro refusée. Veuillez autoriser l'accès au microphone dans les paramètres.",
+    "networkError": "Échec de la requête réseau. Veuillez vérifier votre connexion.",
+    "timeout": "Délai d'attente de la traduction dépassé. Veuillez réessayer.",
+    "dismiss": "Fermer"
+  },
+  "footer": {
+    "tagline": "Talkie-Walkie Vocal IA en temps réel"
+  }
+}
