@@ -13,6 +13,7 @@ import { AudioRecordingService } from '../../../../core/services/audio-recording
 export class AudioWaveformComponent {
   @Input() barCount: number = 8;
   @Input() activeColor: 'recording' | 'playing' | 'primary' = 'recording';
+  @Input() isPaused: boolean = false;
 
   readonly audioRecordingService = inject(AudioRecordingService);
 

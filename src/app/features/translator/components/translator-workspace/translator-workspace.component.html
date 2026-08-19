@@ -15,67 +15,106 @@
     <!-- Main Dual Card Layout with Central Swap Bridge -->
     <div class="workspace-grid-layout d-flex flex-column flex-lg-row align-items-stretch justify-content-center">
       
-      <!-- Source Language Card (Left) -->
+      <!-- Source Language Card (Left - Editable Input Canvas) -->
       <div class="card-column flex-grow-1">
         @if (stateService.workflowState$ | async; as appState) {
           <div class="translation-card h-100 d-flex flex-column justify-content-between"
                [class.translation-card--active]="appState === AppWorkflowState.RECORDING">
             
             <!-- Top Panel: From Label + Selector -->
-            <div class="card-top-panel d-flex justify-content-between align-items-center mb-4">
+            <div class="card-top-panel d-flex justify-content-between align-items-center mb-3">
               <span class="text-uppercase tracking-wider small label-tag">
                 {{ i18nService.get('workspace.fromLabel') }}
               </span>
               <app-language-selector [type]="'source'"></app-language-selector>
             </div>
 
-            <!-- Main Spoken Text Area -->
-            <div class="text-display-box my-3 flex-grow-1">
-              @if (stateService.recordedText$ | async; as recordedText) {
-                <p class="fs-4 lh-base spoken-text" [class.text-opacity-50]="appState === AppWorkflowState.RECORDING">
-                  {{ recordedText }}
-                </p>
-              } @else {
-                <p class="fs-4 lh-base placeholder-hint">
-                  {{ appState === AppWorkflowState.RECORDING 
-                     ? i18nService.get('workspace.sourceListening') 
-                     : i18nService.get('workspace.sourcePlaceholder') }}
-                </p>
-              }
+            <!-- Main Editable Text Canvas Area -->
+            <div class="text-display-box my-2 flex-grow-1 position-relative">
+              <textarea
+                class="form-control borderless-canvas-textarea w-100 h-100"
+                [ngModel]="inputText()"
+                (ngModelChange)="onInputTextChange($event)"
+                [placeholder]="appState === AppWorkflowState.RECORDING 
+                               ? i18nService.get('workspace.sourceListening') 
+                               : i18nService.get('workspace.sourcePlaceholder')"
+                [disabled]="appState === AppWorkflowState.RECORDING"
+                rows="4"
+                aria-label="Source text input"></textarea>
             </div>
 
-            <!-- Bottom Actions: Waveform + Push-to-Talk Button -->
-            <div class="card-bottom-actions d-flex align-items-center justify-content-between mt-4">
-              <div class="waveform-slot">
+            <!-- Bottom Actions: Left (Char Count & Clear) + Right (Translate & Mic) -->
+            <div class="card-bottom-actions d-flex align-items-center justify-content-between pt-2">
+              
+              <!-- Left Utility Group: Character count + Secondary Clear Icon Button -->
+              <div class="d-flex align-items-center gap-2">
+                @if (inputText()) {
+                  <span class="char-count-label text-xs font-monospace user-select-none">
+                    {{ inputText().length }} chars
+                  </span>
+                  <!-- Secondary Subtle Clear Icon Button -->
+                  <button 
+                    type="button" 
+                    class="btn btn-icon-subtle rounded-circle d-flex align-items-center justify-content-center"
+                    (click)="clearInputText()"
+                    [title]="i18nService.get('workspace.clearText')"
+                    [attr.aria-label]="i18nService.get('workspace.clearText')">
+                    <i class="bi bi-x-lg"></i>
+                  </button>
+                }
+
                 @if (appState === AppWorkflowState.RECORDING) {
                   <app-audio-waveform [activeColor]="'recording'"></app-audio-waveform>
                 }
               </div>
 
-              <!-- Push-to-Talk Mic Button -->
-              <button 
-                type="button"
-                class="mic-action-button btn border-0 d-flex align-items-center justify-content-center text-white"
-                [class.is-recording]="appState === AppWorkflowState.RECORDING"
-                [class.is-processing]="appState === AppWorkflowState.PROCESSING || appState === AppWorkflowState.REQUESTING_PERMISSION"
-                (mousedown)="onPointerDown($event)"
-                (mouseup)="onPointerUp()"
-                (mouseleave)="onPointerLeave()"
-                (touchstart)="onPointerDown($event)"
-                (touchend)="onPointerUp()"
-                (touchcancel)="onPointerUp()"
-                (click)="handleButtonClick()"
-                [attr.aria-label]="i18nService.get('workspace.recordButtonAria')">
-                @if (appState === AppWorkflowState.RECORDING) {
-                  <i class="bi bi-stop-fill fs-2" aria-hidden="true"></i>
-                } @else if (appState === AppWorkflowState.PROCESSING || appState === AppWorkflowState.REQUESTING_PERMISSION) {
-                  <div class="spinner-border spinner-border-sm text-white" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                  </div>
-                } @else {
-                  <i class="bi bi-mic-fill fs-2" aria-hidden="true"></i>
+              <!-- Right Action Group: Secondary Translate Button + Hero Mic Button -->
+              <div class="d-flex align-items-center gap-2.5">
+                <!-- Secondary Refined Action Button: Translate -->
+                @if (inputText()) {
+                  <button 
+                    type="button"
+                    class="btn btn-secondary-action rounded-pill px-3 py-1.5 d-flex align-items-center gap-1.5 shadow-sm"
+                    [disabled]="!inputText().trim() || appState === AppWorkflowState.PROCESSING"
+                    (click)="manualTranslate()"
+                    title="Translate (Ctrl + Enter)">
+                    @if (appState === AppWorkflowState.PROCESSING) {
+                      <div class="spinner-border spinner-border-sm" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                      </div>
+                    } @else {
+                      <i class="bi bi-translate fs-6"></i>
+                    }
+                    <span class="fw-semibold">{{ i18nService.get('workspace.translateAction') }}</span>
+                  </button>
                 }
-              </button>
+
+                <!-- Primary Hero Button: Push-to-Talk Mic Button -->
+                <button 
+                  type="button"
+                  class="mic-hero-button btn border-0 d-flex align-items-center justify-content-center text-white"
+                  [class.is-recording]="appState === AppWorkflowState.RECORDING"
+                  [class.is-processing]="appState === AppWorkflowState.PROCESSING || appState === AppWorkflowState.REQUESTING_PERMISSION"
+                  (mousedown)="onPointerDown($event)"
+                  (mouseup)="onPointerUp()"
+                  (mouseleave)="onPointerLeave()"
+                  (touchstart)="onPointerDown($event)"
+                  (touchend)="onPointerUp()"
+                  (touchcancel)="onPointerUp()"
+                  (click)="handleButtonClick()"
+                  [attr.aria-label]="i18nService.get('workspace.recordButtonAria')">
+                  @if (appState === AppWorkflowState.RECORDING) {
+                    <i class="bi bi-stop-fill fs-3" aria-hidden="true"></i>
+                  } @else if (appState === AppWorkflowState.PROCESSING || appState === AppWorkflowState.REQUESTING_PERMISSION) {
+                    <div class="spinner-border spinner-border-sm text-white" role="status">
+                      <span class="visually-hidden">Loading...</span>
+                    </div>
+                  } @else {
+                    <i class="bi bi-mic-fill fs-3" aria-hidden="true"></i>
+                  }
+                </button>
+              </div>
+
             </div>
 
           </div>
@@ -95,14 +134,14 @@
         </button>
       </div>
 
-      <!-- Target Language Card (Right) -->
+      <!-- Target Language Card (Right - Clean Output Canvas) -->
       <div class="card-column flex-grow-1">
         @if (stateService.workflowState$ | async; as appState) {
           <div class="translation-card h-100 d-flex flex-column justify-content-between"
                [class.translation-card--playing]="appState === AppWorkflowState.PLAYING">
             
             <!-- Top Panel: To Label + Selector -->
-            <div class="card-top-panel d-flex justify-content-between align-items-center mb-4">
+            <div class="card-top-panel d-flex justify-content-between align-items-center mb-3">
               <span class="text-uppercase tracking-wider small label-tag">
                 {{ i18nService.get('workspace.toLabel') }}
               </span>
@@ -110,7 +149,7 @@
             </div>
 
             <!-- Main Translated Text Area -->
-            <div class="text-display-box my-3 flex-grow-1">
+            <div class="text-display-box my-2 flex-grow-1">
               @if (appState === AppWorkflowState.PROCESSING) {
                 <!-- Processing Skeleton Shimmer -->
                 <div class="placeholder-glow py-2">
@@ -120,7 +159,7 @@
                 </div>
               } @else {
                 @if (stateService.translatedText$ | async; as translatedText) {
-                  <p class="fs-4 lh-base fw-semibold translated-text">
+                  <p class="fs-4 lh-base fw-bold translated-text">
                     {{ translatedText }}
                   </p>
                 } @else {
@@ -131,39 +170,47 @@
               }
             </div>
 
-            <!-- Bottom Actions: Waveform indicator + Play/Copy Buttons -->
-            <div class="card-bottom-actions d-flex align-items-center justify-content-between mt-4">
-              <div class="waveform-slot">
-                @if (appState === AppWorkflowState.PLAYING) {
-                  <app-audio-waveform [activeColor]="'playing'"></app-audio-waveform>
+            <!-- Bottom Actions: Badge on Left + Copy Button on Right -->
+            <div class="card-bottom-actions d-flex align-items-center justify-content-between pt-2">
+              
+              <!-- Left: Waveform or AI Badge (Synchronized with Audio Player State) -->
+              <div class="d-flex align-items-center gap-2">
+                @if (voicePipelineService.isPlaying() || voicePipelineService.isPaused()) {
+                  <div class="d-flex align-items-center gap-2">
+                    <app-audio-waveform 
+                      [activeColor]="'playing'"
+                      [isPaused]="voicePipelineService.isPaused()">
+                    </app-audio-waveform>
+                    @if (voicePipelineService.isPlaying()) {
+                      <span class="text-xs text-success fw-semibold">{{ i18nService.get('status.playing') }}</span>
+                    } @else if (voicePipelineService.isPaused()) {
+                      <span class="text-xs text-warning fw-semibold">{{ i18nService.get('player.pause') }}</span>
+                    }
+                  </div>
+                } @else if (stateService.translatedText$ | async) {
+                  <span class="ai-badge d-flex align-items-center gap-1.5 small user-select-none">
+                    <i class="bi bi-stars text-primary"></i>
+                    <span>AI Translated</span>
+                  </span>
                 }
               </div>
 
+              <!-- Right: Secondary Copy Button -->
               @if (stateService.translatedText$ | async; as translatedText) {
                 <div class="d-flex align-items-center gap-2">
-                  <!-- Play Audio Button -->
                   <button 
                     type="button"
-                    class="btn action-icon-btn touch-action-target rounded-circle border-0"
-                    [disabled]="!translatedText || appState === AppWorkflowState.PROCESSING"
-                    (click)="playOutputAudio(translatedText)"
-                    [attr.aria-label]="i18nService.get('workspace.playOutputAria')">
-                    <i class="bi bi-volume-up-fill fs-4" [class.text-success]="appState === AppWorkflowState.PLAYING" aria-hidden="true"></i>
-                  </button>
-
-                  <!-- Copy Button -->
-                  <button 
-                    type="button"
-                    class="btn action-icon-btn touch-action-target rounded-circle border-0"
-                    [disabled]="!translatedText || appState === AppWorkflowState.PROCESSING"
+                    class="btn btn-icon-secondary rounded-circle border-0 d-flex align-items-center justify-content-center"
                     (click)="copyToClipboard(translatedText)"
+                    [title]="i18nService.get('workspace.copyOutputAria')"
                     [attr.aria-label]="i18nService.get('workspace.copyOutputAria')">
-                    <i class="bi bi-copy fs-5" aria-hidden="true"></i>
+                    <i class="bi bi-copy fs-6" aria-hidden="true"></i>
                   </button>
                 </div>
               } @else {
                 <div class="spacer"></div>
               }
+
             </div>
 
           </div>
@@ -172,11 +219,102 @@
 
     </div>
 
+    <!-- ============================================================== -->
+    <!-- STICKY FLOATING BOTTOM STUDIO AUDIO PLAYER DOCK                -->
+    <!-- ============================================================== -->
+    @if (stateService.translatedText$ | async; as activeTranslation) {
+      @if (voicePipelineService.isPlayerVisible() || activeTranslation) {
+        <aside class="sticky-studio-player-container">
+          <div class="sticky-player-dock shadow-2xl d-flex flex-column flex-md-row align-items-stretch align-items-md-center justify-content-between gap-3 p-3 px-md-4 rounded-pill">
+            
+            <!-- Left: Target Language Chip & Status -->
+            <div class="player-lang-chip d-flex align-items-center gap-2.5 ps-md-1">
+              <span class="fs-4 lh-1">{{ getTargetLangFlag() }}</span>
+              <div class="d-flex flex-column justify-content-center">
+                <span class="player-lang-title fw-bold small text-truncate" style="max-width: 120px;">{{ getTargetLangName() }}</span>
+                <span class="player-lang-status text-xs font-medium">
+                  {{ voicePipelineService.isPlaying() ? i18nService.get('status.playing') : (voicePipelineService.isPaused() ? i18nService.get('player.pause') : i18nService.get('status.idle')) }}
+                </span>
+              </div>
+            </div>
+
+            <!-- Center: Interactive Audio Controls & Live Scrubber Bar -->
+            <div class="player-controls-center d-flex align-items-center gap-3 flex-grow-1 mx-md-2">
+              <!-- Primary Player Morph Button: Play / Pause (Compact 38px with breathing room) -->
+              <button 
+                type="button" 
+                class="btn btn-player-play-morph rounded-circle shadow d-flex align-items-center justify-content-center text-white border-0"
+                [class.is-playing]="voicePipelineService.isPlaying()"
+                (click)="togglePlayPause()"
+                [attr.aria-label]="voicePipelineService.isPlaying() ? i18nService.get('player.pause') : i18nService.get('player.play')">
+                @if (voicePipelineService.isPlaying()) {
+                  <i class="bi bi-pause-fill fs-5" aria-hidden="true"></i>
+                } @else {
+                  <i class="bi bi-play-fill fs-5 ms-0.5" aria-hidden="true"></i>
+                }
+              </button>
+
+              <!-- Live Time-Based Scrubber Track -->
+              <div class="player-scrubber-wrapper d-flex align-items-center gap-2.5 flex-grow-1">
+                <span class="player-time-label text-xs font-monospace">
+                  {{ voicePipelineService.elapsedTime() }}
+                </span>
+                <div class="player-progress-track rounded-pill flex-grow-1 position-relative">
+                  <div 
+                    class="player-progress-fill rounded-pill" 
+                    [style.width.%]="voicePipelineService.playbackProgress()">
+                  </div>
+                  <div 
+                    class="player-progress-thumb rounded-circle position-absolute"
+                    [style.left.%]="voicePipelineService.playbackProgress()">
+                  </div>
+                </div>
+                <span class="player-time-label text-xs font-monospace">
+                  {{ voicePipelineService.totalTime() }}
+                </span>
+              </div>
+            </div>
+
+            <!-- Right: Playback Speed & Dismiss Actions -->
+            <div class="player-actions-right d-flex align-items-center justify-content-end gap-2 pe-md-1">
+              <!-- Speed Cycle Pill -->
+              <button 
+                type="button" 
+                class="btn btn-speed-pill rounded-pill px-2.5 py-1 font-monospace text-xs fw-bold"
+                (click)="cyclePlaybackSpeed()"
+                [title]="i18nService.get('player.speed')">
+                {{ voicePipelineService.playbackRate() }}x
+              </button>
+
+              <!-- Dismiss Dock -->
+              <button 
+                type="button" 
+                class="btn btn-icon-ghost rounded-circle border-0 d-flex align-items-center justify-content-center"
+                (click)="dismissPlayer()"
+                [title]="i18nService.get('player.dismiss')"
+                [attr.aria-label]="i18nService.get('player.dismiss')">
+                <i class="bi bi-x-lg fs-6"></i>
+              </button>
+            </div>
+
+          </div>
+        </aside>
+      }
+    }
+
     <!-- Toast Notification for Copy -->
     @if (showCopyToast()) {
-      <div class="toast-feedback shadow-lg rounded-pill px-4 py-2 d-flex align-items-center gap-2">
+      <div class="toast-feedback shadow-lg rounded-pill px-4 py-2 d-flex align-items-center gap-2" role="status">
         <i class="bi bi-check-circle-fill text-success" aria-hidden="true"></i>
         <span>{{ i18nService.get('workspace.copiedSuccess') }}</span>
+      </div>
+    }
+
+    <!-- Toast Notification for Background Noise / Silence -->
+    @if (showNoiseToast()) {
+      <div class="toast-feedback toast-feedback--noise shadow-lg rounded-pill px-4 py-2.5 d-flex align-items-center gap-2" role="status" aria-live="polite">
+        <i class="bi bi-soundwave text-warning fs-5" aria-hidden="true"></i>
+        <span class="text-white">{{ i18nService.get('workspace.noSpeechDetected') }}</span>
       </div>
     }
 

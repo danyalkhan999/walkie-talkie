@@ -28,15 +28,28 @@ const FALLBACK_EN: Record<string, unknown> = {
   workspace: {
     fromLabel: 'FROM',
     toLabel: 'TO',
-    sourcePlaceholder: 'Tap the microphone and begin speaking...',
+    sourcePlaceholder: 'Tap the microphone or start typing...',
     sourceListening: 'Listening to your voice...',
     targetPlaceholder: 'Translation will appear here...',
     swapLanguages: 'Swap translation source and target languages',
+    translateAction: 'Translate',
+    translating: 'Translating...',
+    clearText: 'Clear input text',
+    ctrlEnterHint: 'Ctrl + Enter',
     recordButtonAria: 'Toggle speech recording',
     playOutputAria: 'Play translated voice output',
     copyOutputAria: 'Copy translated text',
     copiedSuccess: 'Copied to clipboard!',
+    noSpeechDetected: 'No speech detected. Only background noise was captured.',
     statusIndicator: 'Engine Status'
+  },
+  player: {
+    play: 'Play audio',
+    pause: 'Pause audio',
+    resume: 'Resume audio',
+    replay: 'Replay audio',
+    speed: 'Playback speed',
+    dismiss: 'Dismiss player'
   },
   languages: {
     searchPlaceholder: 'Search language...',
@@ -142,6 +155,8 @@ const FALLBACK_EN: Record<string, unknown> = {
     sttRateLimit: 'API rate limit exceeded. Please wait a moment before speaking again.',
     sttFailed: 'Speech transcription failed. Please try speaking again.',
     sttEmpty: 'No speech detected in audio. Please speak clearly.',
+    llmFailed: 'Translation generation failed. Please try again.',
+    ttsFailed: 'Voice audio synthesis failed. Please try again.',
     timeout: 'Translation request timed out. Please try speaking again.',
     dismiss: 'Dismiss'
   },
