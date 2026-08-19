@@ -36,18 +36,8 @@
       </nav>
     </div>
 
-    <!-- Right Controls: Status Pill + Language Switcher + Settings Gear -->
+    <!-- Right Controls: Language Switcher + Settings Gear -->
     <div class="d-flex align-items-center gap-2 gap-sm-3">
-      
-      <!-- Live Engine Workflow Status Pill -->
-      <div 
-        class="status-pill d-none d-sm-flex align-items-center gap-2 px-3 py-1 rounded-pill"
-        [attr.data-state]="stateService.workflowState$ | async">
-        <span class="status-indicator-dot"></span>
-        <span class="status-label fw-semibold small">
-          {{ i18nService.get('status.' + (stateService.workflowState$ | async)) }}
-        </span>
-      </div>
 
       <!-- App Language Switcher Dropdown -->
       <div class="dropdown position-relative">

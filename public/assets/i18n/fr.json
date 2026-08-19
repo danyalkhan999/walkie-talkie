@@ -22,15 +22,28 @@
   "workspace": {
     "fromLabel": "DE",
     "toLabel": "À",
-    "sourcePlaceholder": "Appuyez sur le micro et commencez à parler...",
+    "sourcePlaceholder": "Appuyez sur le micro ou commencez à écrire...",
     "sourceListening": "Écoute de votre voix...",
     "targetPlaceholder": "La traduction apparaîtra ici...",
-    "swapLanguages": "Échanger les langues source et cible",
+    "swapLanguages": "Inverser les langues source et cible",
+    "translateAction": "Traduire",
+    "translating": "Traduction...",
+    "clearText": "Effacer le texte",
+    "ctrlEnterHint": "Ctrl + Entrée",
     "recordButtonAria": "Basculer l'enregistrement vocal",
-    "playOutputAria": "Écouter la traduction vocale",
+    "playOutputAria": "Lire la voix traduite",
     "copyOutputAria": "Copier le texte traduit",
     "copiedSuccess": "Copié dans le presse-papiers !",
+    "noSpeechDetected": "Aucune voix détectée. Seul le bruit de fond a été capté.",
     "statusIndicator": "État du moteur"
+  },
+  "player": {
+    "play": "Lire l'audio",
+    "pause": "Mettre en pause",
+    "resume": "Reprendre la lecture",
+    "replay": "Rejouer",
+    "speed": "Vitesse de lecture",
+    "dismiss": "Fermer le lecteur"
   },
   "drawer": {
     "title": "Paramètres & Connexion",
@@ -130,6 +143,8 @@
     "sttRateLimit": "Limite de débit API dépassée. Veuillez patienter avant de reparler.",
     "sttFailed": "Échec de la transcription vocale. Veuillez réessayer.",
     "sttEmpty": "Aucune voix détectée dans l'audio. Veuillez parler distinctement.",
+    "llmFailed": "Échec de la génération de la traduction. Veuillez réessayer.",
+    "ttsFailed": "Échec de la synthèse vocale. Veuillez réessayer.",
     "timeout": "Délai d'attente de la traduction dépassé. Veuillez réessayer.",
     "dismiss": "Fermer"
   },

@@ -16,6 +16,16 @@
   &:not(.live-meter) {
     animation: waveform-jump 1s ease-in-out infinite alternate;
   }
+
+  &.paused-bar {
+    animation: none !important;
+    height: 6px !important;
+    opacity: 0.4 !important;
+  }
+}
+
+.waveform-container.is-paused .waveform-bar {
+  animation-play-state: paused !important;
 }
 
 .waveform-container[data-color='playing'] .waveform-bar {
