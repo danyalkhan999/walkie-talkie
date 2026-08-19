@@ -5,6 +5,8 @@ import {
   AiProvider, 
   DEFAULT_AI_PROVIDER, 
   STORAGE_KEYS, 
+  GROQ_LLM_CANDIDATES,
+  AI_MODELS,
   LOG_PREFIXES 
 } from '../../utils/constants';
 import { getLocalStorageItem, setLocalStorageItem, removeLocalStorageItem } from '../../utils/storage.utils';
@@ -13,6 +15,14 @@ export interface KeyVerificationResult {
   success: boolean;
   errorKey?: string;
   statusCode?: number;
+}
+
+interface GroqModelsResponse {
+  data: Array<{
+    id: string;
+    object?: string;
+    active?: boolean;
+  }>;
 }
 
 @Injectable({
@@ -42,6 +52,11 @@ export class ApiConfigService {
     getLocalStorageItem<string>(STORAGE_KEYS.ELEVENLABS_API_KEY, '')
   );
 
+  // Dynamically auto-discovered Groq model
+  readonly resolvedGroqModel = signal<string>(
+    getLocalStorageItem<string>(STORAGE_KEYS.GROQ_RESOLVED_MODEL, AI_MODELS.GROQ_DEFAULT_LLM)
+  );
+
   readonly groqApiKey = this.groqKeySignal.asReadonly();
   readonly openaiApiKey = this.openaiKeySignal.asReadonly();
   readonly elevenlabsApiKey = this.elevenlabsKeySignal.asReadonly();
@@ -57,6 +72,10 @@ export class ApiConfigService {
 
   constructor() {
     this.logInitialStatus();
+    // Auto-discover models on startup if Groq key exists
+    if (this.groqKeySignal().trim()) {
+      this.discoverGroqModels(this.groqKeySignal().trim()).catch(() => {});
+    }
   }
 
   openDrawer(): void {
@@ -82,6 +101,13 @@ export class ApiConfigService {
     setLocalStorageItem(STORAGE_KEYS.ACTIVE_AI_PROVIDER, provider);
   }
 
+  setResolvedGroqModel(modelId: string): void {
+    if (!modelId) return;
+    this.resolvedGroqModel.set(modelId);
+    setLocalStorageItem(STORAGE_KEYS.GROQ_RESOLVED_MODEL, modelId);
+    console.log(`${LOG_PREFIXES.API} Saved resolved Groq model: [${modelId}]`);
+  }
+
   setApiKey(provider: AiProvider, rawKey: string): void {
     const trimmed = rawKey.trim();
     const masked = this.maskKey(trimmed);
@@ -92,6 +118,7 @@ export class ApiConfigService {
         if (trimmed) {
           setLocalStorageItem(STORAGE_KEYS.GROQ_API_KEY, trimmed);
           console.log(`${LOG_PREFIXES.API} Saved GROQ API key (${masked})`);
+          this.discoverGroqModels(trimmed).catch(() => {});
         } else {
           removeLocalStorageItem(STORAGE_KEYS.GROQ_API_KEY);
           console.log(`${LOG_PREFIXES.API} Cleared GROQ API key`);
@@ -123,6 +150,41 @@ export class ApiConfigService {
   }
 
   /**
+   * Queries Groq models endpoint and auto-selects the optimal available chat model
+   */
+  async discoverGroqModels(key: string): Promise<string> {
+    try {
+      const headers = new HttpHeaders({ Authorization: `Bearer ${key}` });
+      const res = await firstValueFrom(
+        this.http.get<GroqModelsResponse>('https://api.groq.com/openai/v1/models', { headers })
+      );
+
+      const availableIds = (res?.data || []).map(m => m.id);
+      console.log(`${LOG_PREFIXES.API} Discovered ${availableIds.length} models for Groq key:`, availableIds);
+
+      // Find the highest priority match from our candidate list
+      for (const candidate of GROQ_LLM_CANDIDATES) {
+        if (availableIds.includes(candidate)) {
+          this.setResolvedGroqModel(candidate);
+          return candidate;
+        }
+      }
+
+      // If no candidate matched, pick the first valid text completion model
+      const fallback = availableIds.find(id => 
+        !id.includes('whisper') && 
+        !id.includes('guard') && 
+        !id.includes('orpheus')
+      ) || 'openai/gpt-oss-120b';
+      this.setResolvedGroqModel(fallback);
+      return fallback;
+    } catch (err) {
+      console.warn(`${LOG_PREFIXES.API} Could not auto-discover Groq models, using default:`, err);
+      return this.resolvedGroqModel();
+    }
+  }
+
+  /**
    * Dispatches a live lightweight ping / health-check call to verify that the API key is valid on the server
    */
   async testConnection(provider: AiProvider, rawKey: string): Promise<KeyVerificationResult> {
@@ -135,9 +197,8 @@ export class ApiConfigService {
 
     try {
       if (provider === AiProvider.GROQ) {
-        const headers = new HttpHeaders({ Authorization: `Bearer ${key}` });
-        await firstValueFrom(this.http.get('https://api.groq.com/openai/v1/models', { headers }));
-        console.log(`${LOG_PREFIXES.API} Live Groq API verification succeeded (200 OK)`);
+        const resolvedModel = await this.discoverGroqModels(key);
+        console.log(`${LOG_PREFIXES.API} Live Groq API verification succeeded. Auto-selected model: [${resolvedModel}]`);
         return { success: true };
       } 
       
@@ -150,9 +211,22 @@ export class ApiConfigService {
       
       if (provider === AiProvider.ELEVENLABS) {
         const headers = new HttpHeaders({ 'xi-api-key': key });
-        await firstValueFrom(this.http.get('https://api.elevenlabs.io/v1/user', { headers }));
-        console.log(`${LOG_PREFIXES.API} Live ElevenLabs API verification succeeded (200 OK)`);
-        return { success: true };
+        try {
+          await firstValueFrom(this.http.get('https://api.elevenlabs.io/v1/models', { headers }));
+          console.log(`${LOG_PREFIXES.API} Live ElevenLabs API verification succeeded (200 OK)`);
+          return { success: true };
+        } catch (subErr) {
+          // If key is authenticated but restricted specifically to Text-to-Speech (missing_permissions), accept it!
+          if (
+            subErr instanceof HttpErrorResponse &&
+            (subErr.error?.detail?.status === 'missing_permissions' ||
+             subErr.error?.detail?.message?.includes('missing the permission'))
+          ) {
+            console.log(`${LOG_PREFIXES.API} ElevenLabs API key authenticated (Scoped for Text-to-Speech)`);
+            return { success: true };
+          }
+          throw subErr;
+        }
       }
 
       return { success: true };

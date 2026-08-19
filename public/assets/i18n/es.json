@@ -22,15 +22,28 @@
   "workspace": {
     "fromLabel": "DE",
     "toLabel": "A",
-    "sourcePlaceholder": "Toca el micrófono y comienza a hablar...",
-    "sourceListening": "Escuchando tu voz...",
+    "sourcePlaceholder": "Toque el micrófono o comience a escribir...",
+    "sourceListening": "Escuchando su voz...",
     "targetPlaceholder": "La traducción aparecerá aquí...",
     "swapLanguages": "Intercambiar idiomas de origen y destino",
+    "translateAction": "Traducir",
+    "translating": "Traduciendo...",
+    "clearText": "Borrar texto",
+    "ctrlEnterHint": "Ctrl + Enter",
     "recordButtonAria": "Alternar grabación de voz",
-    "playOutputAria": "Reproducir salida de voz traducida",
+    "playOutputAria": "Reproducir salida de voz",
     "copyOutputAria": "Copiar texto traducido",
     "copiedSuccess": "¡Copiado al portapapeles!",
+    "noSpeechDetected": "No se detectó voz. Solo se capturó ruido de fondo.",
     "statusIndicator": "Estado del motor"
+  },
+  "player": {
+    "play": "Reproducir audio",
+    "pause": "Pausar audio",
+    "resume": "Reanudar audio",
+    "replay": "Repetir audio",
+    "speed": "Velocidad de reproducción",
+    "dismiss": "Cerrar reproductor"
   },
   "drawer": {
     "title": "Ajustes y Conexión",
@@ -130,6 +143,8 @@
     "sttRateLimit": "Límite de velocidad de API excedido. Espere un momento antes de hablar de nuevo.",
     "sttFailed": "Falló la transcripción de voz. Intente hablar de nuevo.",
     "sttEmpty": "No se detectó voz en el audio. Hable claramente.",
+    "llmFailed": "Falló la generación de traducción. Intente de nuevo.",
+    "ttsFailed": "Falló la síntesis de voz de audio. Intente de nuevo.",
     "timeout": "Se agotó el tiempo de espera de la solicitud de traducción. Intente hablar de nuevo.",
     "dismiss": "Descartar"
   },

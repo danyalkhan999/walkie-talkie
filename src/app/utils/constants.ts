@@ -70,18 +70,42 @@ export const STORAGE_KEYS = {
   ACTIVE_AI_PROVIDER: 'echotranslate_active_provider',
   GROQ_API_KEY: 'echotranslate_groq_key',
   OPENAI_API_KEY: 'echotranslate_openai_key',
-  ELEVENLABS_API_KEY: 'echotranslate_elevenlabs_key'
+  ELEVENLABS_API_KEY: 'echotranslate_elevenlabs_key',
+  GROQ_RESOLVED_MODEL: 'echotranslate_groq_resolved_model'
 } as const;
+
+// Candidate Groq LLM Models in priority order
+export const GROQ_LLM_CANDIDATES: readonly string[] = [
+  'openai/gpt-oss-120b',
+  'openai/gpt-oss-20b',
+  'groq/compound-mini',
+  'groq/compound',
+  'llama3-8b-8192',
+  'llama-3.1-8b-instant',
+  'qwen/qwen3.6-27b'
+];
 
 // API Endpoints & Models
 export const API_ENDPOINTS = {
   GROQ_STT: 'https://api.groq.com/openai/v1/audio/transcriptions',
-  OPENAI_STT: 'https://api.openai.com/v1/audio/transcriptions'
+  GROQ_LLM: 'https://api.groq.com/openai/v1/chat/completions',
+  OPENAI_STT: 'https://api.openai.com/v1/audio/transcriptions',
+  OPENAI_LLM: 'https://api.openai.com/v1/chat/completions',
+  OPENAI_TTS: 'https://api.openai.com/v1/audio/speech',
+  ELEVENLABS_TTS: 'https://api.elevenlabs.io/v1/text-to-speech',
+  ELEVENLABS_STT: 'https://api.elevenlabs.io/v1/speech-to-text'
 } as const;
 
 export const AI_MODELS = {
   GROQ_STT: 'whisper-large-v3',
-  OPENAI_STT: 'whisper-1'
+  GROQ_DEFAULT_LLM: 'openai/gpt-oss-120b',
+  OPENAI_STT: 'whisper-1',
+  OPENAI_LLM: 'gpt-4o-mini',
+  OPENAI_TTS: 'tts-1',
+  OPENAI_TTS_VOICE: 'alloy',
+  ELEVENLABS_DEFAULT_VOICE_ID: '21m00Tcm4TlvDq8ikWAM', // Rachel
+  ELEVENLABS_MODEL_ID: 'eleven_multilingual_v2',
+  ELEVENLABS_STT_MODEL: 'scribe_v1'
 } as const;
 
 // Timing & Duration Configurations

@@ -22,15 +22,28 @@
   "workspace": {
     "fromLabel": "VON",
     "toLabel": "NACH",
-    "sourcePlaceholder": "Tippen Sie auf das Mikrofon und sprechen Sie...",
-    "sourceListening": "Höre Ihre Stimme...",
-    "targetPlaceholder": "Übersetzung erscheint hier...",
+    "sourcePlaceholder": "Mikrofon antippen oder Text eingeben...",
+    "sourceListening": "Höre auf Ihre Stimme...",
+    "targetPlaceholder": "Die Übersetzung erscheint hier...",
     "swapLanguages": "Quell- und Zielsprache tauschen",
+    "translateAction": "Übersetzen",
+    "translating": "Übersetze...",
+    "clearText": "Text löschen",
+    "ctrlEnterHint": "Strg + Eingabe",
     "recordButtonAria": "Sprachaufnahme umschalten",
-    "playOutputAria": "Übersetzte Sprachausgabe abspielen",
+    "playOutputAria": "Sprachausgabe abspielen",
     "copyOutputAria": "Übersetzten Text kopieren",
     "copiedSuccess": "In die Zwischenablage kopiert!",
+    "noSpeechDetected": "Keine Sprache erkannt. Nur Hintergrundgeräusche erfasst.",
     "statusIndicator": "Engine-Status"
+  },
+  "player": {
+    "play": "Audio abspielen",
+    "pause": "Audio anhalten",
+    "resume": "Audio fortsetzen",
+    "replay": "Wiederholen",
+    "speed": "Geschwindigkeit",
+    "dismiss": "Player schließen"
   },
   "drawer": {
     "title": "Einstellungen & Verbindung",
@@ -130,6 +143,8 @@
     "sttRateLimit": "API-Ratenlimit überschritten. Bitte warten Sie einen Moment.",
     "sttFailed": "Sprachtranskription fehlgeschlagen. Bitte erneut sprechen.",
     "sttEmpty": "Keine Sprache im Audio erkannt. Bitte deutlich sprechen.",
+    "llmFailed": "Übersetzungsgenerierung fehlgeschlagen. Bitte erneut versuchen.",
+    "ttsFailed": "Sprachsynthese fehlgeschlagen. Bitte erneut versuchen.",
     "timeout": "Zeitüberschreitung der Übersetzungsanforderung. Bitte erneut sprechen.",
     "dismiss": "Schließen"
   },

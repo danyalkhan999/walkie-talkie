@@ -1,9 +1,10 @@
-<div class="waveform-container d-flex align-items-center gap-1" [attr.data-color]="activeColor" aria-hidden="true">
+<div class="waveform-container d-flex align-items-center gap-1" [attr.data-color]="activeColor" [class.is-paused]="isPaused" aria-hidden="true">
   @for (bar of bars; track bar) {
     <span 
       class="waveform-bar" 
       [class.live-meter]="activeColor === 'recording'"
-      [style.height.px]="getBarHeight(bar)"
+      [class.paused-bar]="isPaused"
+      [style.height.px]="isPaused ? 6 : getBarHeight(bar)"
       [style.animation-delay.ms]="activeColor !== 'recording' ? bar * 120 : null">
     </span>
   }
